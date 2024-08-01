@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 class BusinessListing extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'uuid',
         'listing_title',
         'listing_description',
         'category_id',
@@ -41,5 +42,13 @@ class BusinessListing extends Model
     public function meta()
     {
         return $this->hasMany(BusinessListingMeta::class);
+    }
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->uuid)) {
+                $user->uuid = (string) Str::uuid();
+            }
+        });
     }
 }

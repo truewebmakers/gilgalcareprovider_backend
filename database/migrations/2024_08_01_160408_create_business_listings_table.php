@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('business_listings', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->string('listing_title');
             $table->text('listing_description');
             $table->unsignedBigInteger('category_id');
