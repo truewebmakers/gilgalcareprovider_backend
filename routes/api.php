@@ -3,7 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\{CategoryController,BusinessListingController,BusinessListingMetaController};
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -16,3 +16,28 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 });
 
 
+
+Route::prefix('categories')->group(function () {
+    Route::get('/get/all', [CategoryController::class, 'index']); // Get all categories
+    Route::post('/store', [CategoryController::class, 'store']); // Create a new category
+    Route::get('/get/{id}', [CategoryController::class, 'show']); // Get a specific category
+    Route::put('/update/{id}', [CategoryController::class, 'update']); // Update a specific category
+    Route::delete('/delete/{id}', [CategoryController::class, 'destroy']); // Delete a specific category
+});
+
+Route::prefix('business-listings')->group(function () {
+    Route::get('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
+    Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
+    Route::get('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
+    Route::put('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
+    Route::delete('/delete/{id}', [BusinessListingController::class, 'destroy']); // Delete a specific listing
+});
+
+// Routes for Business Listing Meta CRUD operations
+Route::prefix('business-listing-meta')->group(function () {
+    Route::get('/get/all/{id}', [BusinessListingMetaController::class, 'index']); // Get all meta
+    Route::post('/store', [BusinessListingMetaController::class, 'store']); // Create a new meta
+    Route::get('/get/{id}', [BusinessListingMetaController::class, 'show']); // Get a specific meta
+    Route::put('/update/{id}', [BusinessListingMetaController::class, 'update']); // Update a specific meta
+    Route::delete('/delete/{id}', [BusinessListingMetaController::class, 'destroy']); // Delete a specific meta
+});
