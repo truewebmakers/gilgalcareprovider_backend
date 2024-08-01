@@ -17,7 +17,7 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken($request->input('email'))->plainTextToken;
-            return response()->json(['token' => $token], 200);
+            return response()->json(['token' => $token,'userInfo' =>$user ], 200);
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
@@ -38,6 +38,6 @@ class UserController extends Controller
         ]);
 
         $token = $user->createToken($request->input('email'))->plainTextToken;
-        return response()->json(['token' => $token], 201);
+        return response()->json(['token' => $token , 'userInfo' =>$user], 201);
     }
 }
