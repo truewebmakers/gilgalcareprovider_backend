@@ -37,7 +37,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = $user->createToken($request->input('email'))->plainTextToken;
         return response()->json(['token' => $token], 201);
     }
 }
