@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('listing_title');
             $table->text('listing_description');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
             $table->string('tagline')->nullable();
             $table->decimal('price_range', 10, 2)->nullable();
             $table->decimal('price_from', 10, 2)->nullable();
