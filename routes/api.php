@@ -25,7 +25,7 @@ Route::prefix('categories')->group(function () {
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy']); // Delete a specific category
 });
 
-Route::prefix('business-listings')->group(function () {
+Route::prefix('listing')->group(function () {
     Route::get('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
     Route::get('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
@@ -34,7 +34,7 @@ Route::prefix('business-listings')->group(function () {
 });
 
 // Routes for Business Listing Meta CRUD operations
-Route::prefix('business-listing-meta')->group(function () {
+Route::prefix('listing-meta')->group(function () {
     Route::get('/get/all/{id}', [BusinessListingMetaController::class, 'index']); // Get all meta
     Route::post('/store', [BusinessListingMetaController::class, 'store']); // Create a new meta
     Route::get('/get/{id}', [BusinessListingMetaController::class, 'show']); // Get a specific meta
