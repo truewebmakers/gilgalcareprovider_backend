@@ -33,9 +33,10 @@ class CategoryController extends Controller
             'feature_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'details' => 'nullable|string',
             'location' => 'nullable|string',
+            'status' => 'required'
         ]);
 
-        $data = $request->only(['name', 'details', 'location']);
+        $data = $request->only(['name', 'details', 'location','status']);
 
         if ($request->hasFile('feature_image')) {
             $file = $request->file('feature_image');

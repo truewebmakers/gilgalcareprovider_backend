@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('feature_image')->nullable();
             $table->text('details')->nullable();
             $table->string('location')->nullable();
+            $table->enum('status',['published','unpublished'])->default('published');
+
+
             $table->timestamps();
         });
     }

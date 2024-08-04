@@ -13,5 +13,6 @@ class Category extends Model
         'feature_image',
         'details',
         'location',
+        'status'
     ];
 }
