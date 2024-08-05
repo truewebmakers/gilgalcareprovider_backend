@@ -26,18 +26,18 @@ Route::prefix('categories')->group(function () {
 });
 
 Route::prefix('listing')->group(function () {
-    Route::get('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
+    Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
-    Route::get('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
-    Route::put('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
+    Route::post('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
+    Route::post('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
     Route::delete('/delete/{id}', [BusinessListingController::class, 'destroy']); // Delete a specific listing
 });
 
 // Routes for Business Listing Meta CRUD operations
 Route::prefix('listing-meta')->group(function () {
-    Route::get('/get/all/{id}', [BusinessListingMetaController::class, 'index']); // Get all meta
+    Route::post('/get/all/{id}', [BusinessListingMetaController::class, 'index']); // Get all meta
     Route::post('/store', [BusinessListingMetaController::class, 'store']); // Create a new meta
-    Route::get('/get/{id}', [BusinessListingMetaController::class, 'show']); // Get a specific meta
-    Route::put('/update/{id}', [BusinessListingMetaController::class, 'update']); // Update a specific meta
+    Route::post('/get/{id}', [BusinessListingMetaController::class, 'show']); // Get a specific meta
+    Route::post('/update/{id}', [BusinessListingMetaController::class, 'update']); // Update a specific meta
     Route::delete('/delete/{id}', [BusinessListingMetaController::class, 'destroy']); // Delete a specific meta
 });

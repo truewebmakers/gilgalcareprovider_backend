@@ -79,7 +79,7 @@ class BusinessListingController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
         $listing = BusinessListing::with('category', 'meta')->find($id);
 
@@ -90,7 +90,7 @@ class BusinessListingController extends Controller
             ], 404);
         }
 
-        return response()->json($listing);
+        return response()->json(['status' => true,'data' => $listing ]);
     }
 
     /**
@@ -100,7 +100,7 @@ class BusinessListingController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id)
     {
         $request->validate([
             'listing_title' => 'required|string|max:255',
