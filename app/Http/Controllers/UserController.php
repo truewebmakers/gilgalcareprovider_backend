@@ -41,6 +41,22 @@ class UserController extends Controller
         return response()->json(['token' => $token , 'userInfo' =>$user], 201);
     }
 
+    public function getProfile(Request $request,$userId)
+    {
+        $user = User::find($userId);
+        if($user){
+            return response()->json([
+                'message' => 'Profile get successfully',
+                'user' => $user
+            ]);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'User Not found',
+            ],422);
+        }
+    }
+
 
 
     public function updateProfile(Request $request,$userId)
