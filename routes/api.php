@@ -14,6 +14,8 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/update/profile/{id}', [UserController::class, 'updateProfile'])->name('update.profile');
     Route::post('/update/password/{id}', [UserController::class, 'updatePassword'])->name('update.password');
     Route::get('/getProfile/{id}', [UserController::class, 'getProfile'])->name('get.profile');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
 
 });
 

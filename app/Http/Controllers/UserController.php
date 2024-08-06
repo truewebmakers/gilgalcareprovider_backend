@@ -17,7 +17,7 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken($request->input('email'))->plainTextToken;
-            return response()->json(['token' => $token,'userInfo' =>$user ], 200);
+            return response()->json(['token' => $token,'userInfo' =>$user], 200);
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
@@ -56,8 +56,6 @@ class UserController extends Controller
             ],422);
         }
     }
-
-
 
     public function updateProfile(Request $request,$userId)
     {
@@ -114,5 +112,15 @@ class UserController extends Controller
                 'message' => 'Password updated successfully.',
             ]);
 
+    }
+
+    public function logout(Request $request)
+    {
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Successfully logged out' ,'status' => true
+        ]);
     }
 }
