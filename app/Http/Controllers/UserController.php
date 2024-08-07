@@ -60,26 +60,38 @@ class UserController extends Controller
     public function updateProfile(Request $request,$userId)
     {
         $user = User::find($userId);
-        $data = $request->only(['name', 'phone' ,'email', 'notes', 'fb_link', 'twitter_link', 'googleplus_link', 'insta_link']);
 
-        // Handle profile picture upload
-        if ($request->hasFile('profile_pic')) {
-            // Delete old profile picture if exists
-            if ($user->profile_pic && Storage::exists($user->profile_pic)) {
-                Storage::delete($user->profile_pic);
+        if($user){
+            $data = $request->only(['name', 'phone' ,'email', 'notes', 'fb_link', 'twitter_link', 'googleplus_link', 'insta_link']);
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_pic')) {
+                // Delete old profile picture if exists
+                if ($user->profile_pic && Storage::exists($user->profile_pic)) {
+                    Storage::delete($user->profile_pic);
+                }
+
+                $file = $request->file('profile_pic');
+                $path = $file->store('profile_pics', 'public');
+                $data['profile_pic'] = $path;
             }
 
-            $file = $request->file('profile_pic');
-            $path = $file->store('profile_pics', 'public');
-            $data['profile_pic'] = $path;
+
+
+            $user->update($data);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Profile updated successfully',
+                'user' => $user
+            ],200);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'User not Found',
+            ],422);
         }
 
-        $user->update($data);
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => $user
-        ]);
     }
 
     public function updatePassword(Request $request,$userId)
