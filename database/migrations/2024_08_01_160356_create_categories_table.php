@@ -18,8 +18,6 @@ return new class extends Migration
             $table->text('details')->nullable();
             $table->string('location')->nullable();
             $table->enum('status',['published','unpublished'])->default('published');
-
-
             $table->timestamps();
         });
     }

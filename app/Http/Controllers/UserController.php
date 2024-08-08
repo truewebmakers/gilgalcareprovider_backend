@@ -17,10 +17,13 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken($request->input('email'))->plainTextToken;
-            return response()->json(['token' => $token,'userInfo' =>$user], 200);
+            return response()->json(['token' => $token,'userInfo' =>$user,  'message' => 'You’ve successfully logged in',], 200);
         }
-
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid email or password. Please try again.',
+            'error' => 'Invalid email or password. Please try again.'
+        ],422);
     }
 
     public function signup(Request $request)
@@ -61,7 +64,7 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        if($user){
+        if(!empty($user)){
             $data = $request->only(['name', 'phone' ,'email', 'notes', 'fb_link', 'twitter_link', 'googleplus_link', 'insta_link']);
 
             // Handle profile picture upload
