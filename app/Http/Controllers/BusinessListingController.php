@@ -51,6 +51,7 @@ class BusinessListingController extends Controller
             'instagram' => 'nullable|url',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'added_by' => 'required'
         ]);
 
         $data = $request->except(['featured_image', 'logo']);
