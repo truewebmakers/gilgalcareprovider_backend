@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
 
 
-Route::prefix('categories')->group(function () {
+Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
     Route::get('/get/all', [CategoryController::class, 'index']); // Get all categories
     Route::post('/store', [CategoryController::class, 'store']); // Create a new category
     Route::get('/get/{id}', [CategoryController::class, 'show']); // Get a specific category
@@ -29,7 +29,7 @@ Route::prefix('categories')->group(function () {
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy']); // Delete a specific category
 });
 
-Route::prefix('listing')->group(function () {
+Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
     Route::post('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
@@ -38,7 +38,7 @@ Route::prefix('listing')->group(function () {
 });
 
 // Routes for Business Listing Meta CRUD operations
-Route::prefix('listing-meta')->group(function () {
+Route::middleware('auth:sanctum')->prefix('listing-meta')->group(function () {
     Route::post('/get/all', [BusinessListingMetaController::class, 'index']); // Get all meta
     Route::post('/store', [BusinessListingMetaController::class, 'store']); // Create a new meta
     Route::post('/get/{id}', [BusinessListingMetaController::class, 'show']); // Get a specific meta
