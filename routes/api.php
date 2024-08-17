@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
 });
 
-
+Route::get('/get-pb/all', [CategoryController::class, 'index']);
 
 Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
     Route::get('/get/all', [CategoryController::class, 'index']); // Get all categories
