@@ -283,8 +283,12 @@ class BusinessListingController extends Controller
         // Get the results
         $businessListings = $query->get();
 
-        // Return the results, e.g., to a view or as JSON
-        return view('business_listings.index', compact('businessListings'));
+        return response()->json([
+            'message' => 'Business listing fetched successfully.',
+            'data' => $businessListings
+        ]);
+
+
     }
 
 
