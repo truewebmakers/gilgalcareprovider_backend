@@ -32,7 +32,8 @@ class BusinessListing extends Model
         'instagram',
         'featured_image',
         'logo',
-        'added_by'
+        'added_by',
+        'status'
     ];
 
     public function category()

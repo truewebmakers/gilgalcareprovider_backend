@@ -15,9 +15,14 @@ class BusinessListingController extends Controller
      *
      * @return JsonResponse
      */
-    public function index($id)
+    public function index($id='')
     {
-        $listings = BusinessListing::with('category')->get();
+        if($id){
+           $listings = BusinessListing::with('category')->where('added_by',$id)->get();
+        }else{
+            $listings = BusinessListing::with('category')->where('added_by',$id)->get();
+        }
+
         return response()->json($listings);
     }
 

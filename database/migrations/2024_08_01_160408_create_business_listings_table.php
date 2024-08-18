@@ -18,10 +18,8 @@ return new class extends Migration
             $table->text('listing_description');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-
             $table->unsignedBigInteger('added_by');
             $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
-
             $table->string('tagline')->nullable();
             $table->decimal('price_range', 10, 2)->nullable();
             $table->decimal('price_from', 10, 2)->nullable();

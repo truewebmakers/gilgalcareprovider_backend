@@ -16,10 +16,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/getProfile/{id}', [UserController::class, 'getProfile'])->name('get.profile');
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-
 });
 
-Route::get('/get-pb/all', [CategoryController::class, 'index']);
+Route::get('categories/get-pb/all', [CategoryController::class, 'index']);
 
 Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
     Route::get('/get/all', [CategoryController::class, 'index']); // Get all categories
@@ -29,6 +28,7 @@ Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy']); // Delete a specific category
 });
 
+Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
 Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
