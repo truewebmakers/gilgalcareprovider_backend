@@ -56,7 +56,8 @@ class BusinessListingController extends Controller
             'instagram' => 'nullable|url',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'added_by' => 'required'
+            'added_by' => 'required',
+            'status' => 'required'
         ]);
 
         $data = $request->except(['featured_image', 'logo']);
@@ -130,6 +131,7 @@ class BusinessListingController extends Controller
             'instagram' => 'nullable|url',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status' => 'required'
         ]);
 
         $listing = BusinessListing::find($id);
