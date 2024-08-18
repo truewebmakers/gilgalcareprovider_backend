@@ -20,7 +20,7 @@ class BusinessListingController extends Controller
         if($id){
            $listings = BusinessListing::with('category')->where('added_by',$id)->get();
         }else{
-            $listings = BusinessListing::with('category')->where('added_by',$id)->get();
+            $listings = BusinessListing::with('category')->where('status','published')->get();
         }
 
         return response()->json($listings);
