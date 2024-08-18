@@ -38,6 +38,8 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('featured_image')->nullable();
             $table->string('logo')->nullable();
+
+
             $table->timestamps();
         });
     }
