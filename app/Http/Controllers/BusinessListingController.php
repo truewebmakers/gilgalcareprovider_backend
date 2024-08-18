@@ -15,12 +15,12 @@ class BusinessListingController extends Controller
      *
      * @return JsonResponse
      */
-    public function index($id='')
+    public function index($id = '')
     {
-        if($id){
-           $listings = BusinessListing::with('category')->where('added_by',$id)->get();
-        }else{
-            $listings = BusinessListing::with('category')->where('status','published')->get();
+        if ($id) {
+            $listings = BusinessListing::with('category')->where('added_by', $id)->get();
+        } else {
+            $listings = BusinessListing::with('category')->where('status', 'published')->get();
         }
 
         return response()->json($listings);
@@ -96,7 +96,7 @@ class BusinessListingController extends Controller
             ], 404);
         }
 
-        return response()->json(['status' => true,'data' => $listing ]);
+        return response()->json(['status' => true, 'data' => $listing]);
     }
 
     /**
@@ -200,4 +200,102 @@ class BusinessListingController extends Controller
             'message' => 'Business listing deleted successfully.'
         ]);
     }
+
+    public function SearchBusinessListing(Request $request)
+    {
+        $query = BusinessListing::query();
+
+        // Filter by listing_title
+        if ($request->filled('listing_title')) {
+            $query->where('listing_title', 'like', '%' . $request->input('listing_title') . '%');
+        }
+
+        // Filter by listing_description
+        if ($request->filled('listing_description')) {
+            $query->where('listing_description', 'like', '%' . $request->input('listing_description') . '%');
+        }
+
+        // Filter by category_id
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // Filter by added_by
+        if ($request->filled('added_by')) {
+            $query->where('added_by', $request->input('added_by'));
+        }
+
+        // Filter by tagline
+        if ($request->filled('tagline')) {
+            $query->where('tagline', 'like', '%' . $request->input('tagline') . '%');
+        }
+
+        // Filter by price_range (assuming you want to filter based on a range)
+        if ($request->filled('price_from') && $request->filled('price_to')) {
+            $query->whereBetween('price_range', [$request->input('price_from'), $request->input('price_to')]);
+        }
+
+        // Filter by location
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%' . $request->input('location') . '%');
+        }
+
+        // Filter by address
+        if ($request->filled('address')) {
+            $query->where('address', 'like', '%' . $request->input('address') . '%');
+        }
+
+        // Filter by email
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        // Filter by website
+        if ($request->filled('website')) {
+            $query->where('website', 'like', '%' . $request->input('website') . '%');
+        }
+
+        // Filter by phone
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->input('phone') . '%');
+        }
+
+        // Filter by social media fields
+        if ($request->filled('facebook')) {
+            $query->where('facebook', 'like', '%' . $request->input('facebook') . '%');
+        }
+        if ($request->filled('twitter')) {
+            $query->where('twitter', 'like', '%' . $request->input('twitter') . '%');
+        }
+        if ($request->filled('google_plus')) {
+            $query->where('google_plus', 'like', '%' . $request->input('google_plus') . '%');
+        }
+        if ($request->filled('instagram')) {
+            $query->where('instagram', 'like', '%' . $request->input('instagram') . '%');
+        }
+
+        // Apply additional filtering if needed
+        // For example, filtering by whether the listing has a featured image
+        if ($request->has('has_featured_image')) {
+            $query->whereNotNull('featured_image');
+        }
+
+        // Get the results
+        $businessListings = $query->get();
+
+        // Return the results, e.g., to a view or as JSON
+        return view('business_listings.index', compact('businessListings'));
+    }
+
+
+    // public function SearchBussinessListingSugesstions(Request $request)
+    // {
+    //     $query = Language::query();
+    //     if ($request->filled('language')) {
+    //         $language = $request->input('language');
+    //         $query->where('name', 'LIKE', "%$language%");
+    //     }
+    //     $languages = $query->get();
+    //     return response()->json(['message' => 'languages suggestion list fetched successfully.', 'data' => $languages, 'status' => true], 200);
+    // }
 }

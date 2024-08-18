@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
 });
 
 Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
+Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessListing']);
+
 Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
