@@ -18,7 +18,6 @@ return new class extends Migration
                 $table->string('ip_address')->unique();
                 $table->timestamps();
 
-                $table->unsignedBigInteger('business_listing_id');
                 $table->foreign('business_listing_id')->references('id')->on('business_listings')->onDelete('cascade');
              });
         });
