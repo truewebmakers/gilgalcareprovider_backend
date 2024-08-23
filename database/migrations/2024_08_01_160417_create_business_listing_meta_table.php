@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('business_listing_metas', function (Blueprint $table) {
+        Schema::create('business_listing_meta', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->nullable();
             $table->unsignedBigInteger('business_listing_id');

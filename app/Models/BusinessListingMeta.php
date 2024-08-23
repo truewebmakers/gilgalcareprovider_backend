@@ -9,6 +9,8 @@ class BusinessListingMeta extends Model
 {
     use HasFactory;
 
+    protected $table = 'business_listing_meta';
+
     protected $fillable = [
         'business_listing_id',
         'gallery_image',
