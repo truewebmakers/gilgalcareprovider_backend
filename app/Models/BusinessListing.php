@@ -33,7 +33,9 @@ class BusinessListing extends Model
         'featured_image',
         'logo',
         'added_by',
-        'status'
+        'status',
+        'page_views',
+        'total_shares',
     ];
 
     public function category()
@@ -44,6 +46,11 @@ class BusinessListing extends Model
     public function meta()
     {
         return $this->hasMany(BusinessListingMeta::class);
+    }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedbacks::class, 'business_listing_id');
     }
     protected static function booted()
     {

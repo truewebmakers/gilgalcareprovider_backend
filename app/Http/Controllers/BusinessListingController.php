@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ListingView;
 
 class BusinessListingController extends Controller
 {
@@ -291,6 +292,66 @@ class BusinessListingController extends Controller
         ]);
 
 
+    }
+
+    public function incrementPageViews($id, Request $request)
+    {
+        $listing = BusinessListing::find($id);
+
+        if (!$listing) {
+            return response()->json(['message' => 'Listing not found'], 404);
+        }
+
+        $ipAddress = $request->ip(); // Get the user's IP address
+
+        // Check if the IP address has already viewed this listing
+        $hasViewed = ListingView::where('business_listing_id', $id)
+                                ->where('ip_address', $ipAddress)
+                                ->exists();
+
+        if (!$hasViewed) {
+            // Record the view and increment page views
+            ListingView::create([
+                'business_listing_id' => $id,
+                'ip_address' => $ipAddress,
+            ]);
+
+            $listing->increment('page_views');
+        }
+
+        return response()->json(['message' => 'Page views updated successfully'], 200);
+    }
+
+    // Increment total shares
+    public function incrementShares($id)
+    {
+        $listing = BusinessListing::find($id);
+
+        if (!$listing) {
+            return response()->json(['message' => 'Listing not found'], 404);
+        }
+
+        $listing->increment('total_shares');
+
+        return response()->json(['message' => 'Shares updated successfully'], 200);
+    }
+
+    // Get stats for a business listing
+    public function getListingStats($id)
+    {
+        $listing = BusinessListing::find($id);
+
+        if (!$listing) {
+            return response()->json(['message' => 'Listing not found'], 404);
+        }
+
+        $reviewCount = $listing->feedbacks()->count();
+
+        return response()->json([
+            'page_views' => $listing->page_views,
+            'total_shares' => $listing->total_shares,
+            'total_reviews' => $reviewCount,
+        ], 200);
     }
 
 
