@@ -15,4 +15,14 @@ class Category extends Model
         'location',
         'status'
     ];
+
+    public function getFeatureImageAttribute($value)
+    {
+        if ($value) {
+            // Prepend your AWS S3 bucket URL to the profile_pic path
+            return  config('constants.image_url'). $value;
+        }
+        return null;
+    }
+
 }
