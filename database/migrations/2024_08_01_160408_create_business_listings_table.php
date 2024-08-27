@@ -27,8 +27,10 @@ return new class extends Migration
             $table->text('features_information')->nullable();
             $table->string('location');
             $table->string('address');
-            $table->decimal('map_lat', 10, 7)->nullable();
-            $table->decimal('map_long', 10, 7)->nullable();
+            // $table->decimal('map_lat', 10, 7)->nullable();
+            // $table->decimal('map_long', 10, 7)->nullable();
+            $table->string('map_lat')->nullable();
+            $table->string('map_long')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
             $table->string('phone')->nullable();
