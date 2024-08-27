@@ -42,7 +42,7 @@ class BusinessListing extends Model
     {
         if ($value) {
             // Prepend your AWS S3 bucket URL to the profile_pic path
-            return 'https://webapp.hyperiontech.com.au/gilgalcareprovider/backend/storage/app/public/' . $value;
+            return  config('constants.image_url'). $value;
         }
         return null;
     }
@@ -50,8 +50,10 @@ class BusinessListing extends Model
     public function getFeaturedImageAttribute($value)
     {
         if ($value) {
+
+
             // Prepend your AWS S3 bucket URL to the profile_pic path
-            return 'https://webapp.hyperiontech.com.au/gilgalcareprovider/backend/storage/app/public/' . $value;
+            return  config('constants.image_url') . $value;
         }
         return null;
     }
