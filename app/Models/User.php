@@ -43,7 +43,7 @@ class User extends Authenticatable
     ];
 
 
-    public function getPublicPicAttribute($value)
+    public function getProfilePicAttribute($value)
     {
         if ($value) {
             // Prepend your AWS S3 bucket URL to the profile_pic path
