@@ -38,6 +38,24 @@ class BusinessListing extends Model
         'total_shares',
     ];
 
+    public function getLogoAttribute($value)
+    {
+        if ($value) {
+            // Prepend your AWS S3 bucket URL to the profile_pic path
+            return 'https://webapp.hyperiontech.com.au/gilgalcareprovider/backend/storage/app/public/' . $value;
+        }
+        return null;
+    }
+
+    public function getFeaturedImageAttribute($value)
+    {
+        if ($value) {
+            // Prepend your AWS S3 bucket URL to the profile_pic path
+            return 'https://webapp.hyperiontech.com.au/gilgalcareprovider/backend/storage/app/public/' . $value;
+        }
+        return null;
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
