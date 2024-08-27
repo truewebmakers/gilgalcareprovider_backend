@@ -42,6 +42,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function getPublicPicAttribute($value)
+    {
+        if ($value) {
+            // Prepend your AWS S3 bucket URL to the profile_pic path
+            return  config('constants.image_url'). $value;
+        }
+        return null;
+    }
+
     protected static function booted()
     {
         static::creating(function ($user) {
