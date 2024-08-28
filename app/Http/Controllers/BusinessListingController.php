@@ -61,7 +61,10 @@ class BusinessListingController extends Controller
             'status' => 'required'
         ]);
 
-        return $request->all();
+        return response()->json([
+            'message' => 'Business listing created successfully.',
+            'listing' => $request->all()
+        ]);
 
         $data = $request->except(['featured_image', 'logo']);
 
