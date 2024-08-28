@@ -59,7 +59,7 @@ class BusinessListingController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'added_by' => 'required',
             'status' => 'required',
-            'gallery_images.0' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+            'gallery_images.0' => 'required',
         ]);
 
         // return response()->json([
@@ -164,7 +164,7 @@ class BusinessListingController extends Controller
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'status' => 'required',
-            'gallery_images.0' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+            'gallery_images.0' => 'required',
         ]);
 
         $listing = BusinessListing::find($id);
