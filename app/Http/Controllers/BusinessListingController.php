@@ -61,6 +61,8 @@ class BusinessListingController extends Controller
             'status' => 'required'
         ]);
 
+        return $request->all();
+
         $data = $request->except(['featured_image', 'logo']);
 
         if ($request->hasFile('featured_image')) {
@@ -75,6 +77,7 @@ class BusinessListingController extends Controller
 
         $listing = BusinessListing::create($data);
         $listingId = $listing->id;
+
         if($request->has('gallery_images')){
             $this->finalizeListing($request, $listingId);
         }
