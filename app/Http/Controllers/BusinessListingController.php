@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BusinessListing;
+use App\Models\{BusinessListing,BusinessListingMeta};
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -74,11 +74,39 @@ class BusinessListingController extends Controller
         }
 
         $listing = BusinessListing::create($data);
+        $listingId = $listing->id;
+        if($request->has('gallery_images')){
+            $this->finalizeListing($request, $listingId);
+        }
 
         return response()->json([
             'message' => 'Business listing created successfully.',
             'listing' => $listing
         ]);
+    }
+
+
+    public function finalizeListing(Request $request, $listingId)
+    {
+        // $request->validate([
+        //     'images' => 'required|array',
+        //     'images.*' => 'required|string',
+        // ]);
+
+        foreach ($request->gallery_images as $tempPath) {
+            $tempPathFull = 'temp/' . $tempPath;
+
+            if (Storage::disk('public')->exists($tempPathFull)) {
+                $newPath = 'listing_gallery/' . $listingId . '/' . basename($tempPath);
+                Storage::disk('public')->move($tempPathFull, $newPath);
+                $data['gallery_image'] =$newPath;
+                $data['business_listing_id'] = $listingId;
+            }
+        }
+
+        BusinessListingMeta::create($data);
+
+        return response()->json(['message' => 'Listing updated with images.'], 200);
     }
 
     /**

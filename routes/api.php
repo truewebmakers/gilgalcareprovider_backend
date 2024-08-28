@@ -3,7 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{CategoryController, BusinessListingController, BusinessListingMetaController, FeedbackController};
+use App\Http\Controllers\{CategoryController, BusinessListingController, BusinessListingMetaController, FeedbackController,ImageController};
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::get('/stats/{id}', [BusinessListingController::class, 'getListingStats']);
     Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
     Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
+    Route::post('/upload-image', [ImageController::class, 'uploadTemporaryImage']);
+
 });
 
 // Routes for Business Listing Meta CRUD operations
