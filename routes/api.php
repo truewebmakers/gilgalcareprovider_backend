@@ -30,11 +30,11 @@ Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
 
 Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
 Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessListing']);
-
+Route::get('listing/get-pb/{id}', [BusinessListingController::class, 'show']);
 Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
-    Route::post('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
+    Route::get('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
     Route::post('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
     Route::delete('/delete/{id}', [BusinessListingController::class, 'destroy']); // Delete a specific listing
 
