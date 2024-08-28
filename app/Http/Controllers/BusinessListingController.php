@@ -55,10 +55,11 @@ class BusinessListingController extends Controller
             'twitter' => 'nullable|url',
             'google_plus' => 'nullable|url',
             'instagram' => 'nullable|url',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'added_by' => 'required',
-            'status' => 'required'
+            'status' => 'required',
+            'gallery_images.0' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
         ]);
 
         // return response()->json([
@@ -107,8 +108,6 @@ class BusinessListingController extends Controller
                 BusinessListingMeta::create($data);
             }
         }
-
-
 
         return response()->json(['message' => 'Listing updated with images.'], 200);
     }
@@ -162,9 +161,10 @@ class BusinessListingController extends Controller
             'twitter' => 'nullable|url',
             'google_plus' => 'nullable|url',
             'instagram' => 'nullable|url',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status' => 'required'
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+            'status' => 'required',
+            'gallery_images.0' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
         ]);
 
         $listing = BusinessListing::find($id);
@@ -197,6 +197,12 @@ class BusinessListingController extends Controller
         }
 
         $listing->update($data);
+
+        $listingId = $id;
+
+        if($request->has('gallery_images')){
+            $this->finalizeListing($request, $listingId);
+        }
 
         return response()->json([
             'message' => 'Business listing updated successfully.',
