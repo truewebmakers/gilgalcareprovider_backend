@@ -50,8 +50,6 @@ class BusinessListing extends Model
     public function getFeaturedImageAttribute($value)
     {
         if ($value) {
-
-
             // Prepend your AWS S3 bucket URL to the profile_pic path
             return  config('constants.image_url') . $value;
         }

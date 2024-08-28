@@ -94,10 +94,7 @@ class BusinessListingController extends Controller
 
     public function finalizeListing(Request $request, $listingId)
     {
-        // $request->validate([
-        //     'images' => 'required|array',
-        //     'images.*' => 'required|string',
-        // ]);
+
 
         foreach ($request->gallery_images as $tempPath) {
             $tempPathFull = 'temp/' . $tempPath;
@@ -107,10 +104,11 @@ class BusinessListingController extends Controller
                 Storage::disk('public')->move($tempPathFull, $newPath);
                 $data['gallery_image'] =$newPath;
                 $data['business_listing_id'] = $listingId;
+                BusinessListingMeta::create($data);
             }
         }
 
-        BusinessListingMeta::create($data);
+
 
         return response()->json(['message' => 'Listing updated with images.'], 200);
     }
