@@ -3,7 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{CategoryController, BusinessListingController, BusinessListingMetaController, FeedbackController,ImageController};
+use App\Http\Controllers\{CategoryController, BusinessListingController, BusinessListingMetaController, FeedbackController,ImageController,DashboardController};
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -69,7 +69,7 @@ Route::prefix('feedback')->group(function () {
 //     Route::get('/get/{id}', [FeedbackController::class, 'getFeedback']);
 // });
 
-Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
-    Route::get('/review-count', [FeedbackController::class, 'getReviewCount']);
-    Route::get('/listing-count', [FeedbackController::class, 'getListCounts']);
+Route::prefix('dashboard')->group(function () {
+    Route::get('/review-count', [DashboardController::class, 'getReviewCount']);
+    Route::get('/listing-count', [DashboardController::class, 'getListCounts']);
 });
