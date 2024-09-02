@@ -31,17 +31,21 @@ Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
 Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
 Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessListing']);
 Route::get('listing/get-pb/{id}', [BusinessListingController::class, 'show']);
+
+Route::get('listing/stats/{id}', [BusinessListingController::class, 'getListingStats']);
+Route::post('listing/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
+Route::post('listing/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
+
+
+
 Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
     Route::post('/store', [BusinessListingController::class, 'store']); // Create a new listing
     Route::get('/get/{id}', [BusinessListingController::class, 'show']); // Get a specific listing
     Route::post('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
     Route::delete('/delete/{id}', [BusinessListingController::class, 'destroy']); // Delete a specific listing
-
-    Route::get('/stats/{id}', [BusinessListingController::class, 'getListingStats']);
-    Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
-    Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
     Route::post('/upload-image', [ImageController::class, 'uploadTemporaryImage']);
+
 
 });
 
