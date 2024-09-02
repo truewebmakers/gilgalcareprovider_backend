@@ -54,13 +54,20 @@ Route::middleware('auth:sanctum')->prefix('listing-meta')->group(function () {
     Route::delete('/delete/{id}', [BusinessListingMetaController::class, 'destroy']); // Delete a specific meta
 });
 
-
-Route::middleware('auth:sanctum')->prefix('feedback')->group(function () {
+Route::prefix('feedback')->group(function () {
     Route::post('/store', [FeedbackController::class, 'store']);
     Route::post('/update/{id}', [FeedbackController::class, 'update']);
     Route::get('/business/{businessListingId}', [FeedbackController::class, 'getFeedbackByBusinessListing']);
     Route::get('/get/{id}', [FeedbackController::class, 'getFeedback']);
 });
+
+
+// Route::middleware('auth:sanctum')->prefix('feedback')->group(function () {
+//     Route::post('/store', [FeedbackController::class, 'store']);
+//     Route::post('/update/{id}', [FeedbackController::class, 'update']);
+//     Route::get('/business/{businessListingId}', [FeedbackController::class, 'getFeedbackByBusinessListing']);
+//     Route::get('/get/{id}', [FeedbackController::class, 'getFeedback']);
+// });
 
 Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/review-count', [FeedbackController::class, 'getReviewCount']);
