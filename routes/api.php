@@ -69,7 +69,7 @@ Route::prefix('feedback')->group(function () {
 //     Route::get('/get/{id}', [FeedbackController::class, 'getFeedback']);
 // });
 
-Route::prefix('dashboard')->group(function () {
+Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/review-count', [DashboardController::class, 'getReviewCount']);
     Route::get('/listing-count', [DashboardController::class, 'getListCounts']);
 });
