@@ -130,7 +130,7 @@ class BusinessListingController extends Controller
      */
     public function show($id)
     {
-        $listing = BusinessListing::with(relations: 'category', 'meta')->where(['id' => $id]);
+        $listing = BusinessListing::with(relations: 'category')->where(['id' => $id]);
 
         if (!$listing) {
             return response()->json([
