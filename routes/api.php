@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->prefix('categories')->group(function () {
 Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
 Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessListing']);
 Route::get('listing/get-pb/{id}', [BusinessListingController::class, 'show']);
+Route::get('listing/get-pb-uuid/{uuid}', [BusinessListingController::class, 'public_listing']);
 
 Route::get('/stats/{id}', [BusinessListingController::class, 'getListingStats']);
 Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);

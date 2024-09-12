@@ -27,6 +27,16 @@ class BusinessListingController extends Controller
         return response()->json($listings);
     }
 
+    public function public_listing($uuid)
+    {
+
+        // $listings = BusinessListing::with('category')->get();
+        $listings = BusinessListing::with(relations: 'category', 'meta')->where(['status' => 'published' , 'uuid' => $uuid])->get();
+
+
+        return response()->json($listings);
+    }
+
     /**
      * Store a newly created business listing in storage.
      *
@@ -120,7 +130,7 @@ class BusinessListingController extends Controller
      */
     public function show($id)
     {
-        $listing = BusinessListing::with('category', 'meta')->where(['uuid' => $id]);
+        $listing = BusinessListing::with(relations: 'category', 'meta')->where(['id' => $id]);
 
         if (!$listing) {
             return response()->json([
