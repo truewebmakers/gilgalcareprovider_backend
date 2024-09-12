@@ -32,12 +32,14 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6',
+            'user_type' => 'required'
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'user_type' => $request->input('user_type')
         ]);
 
         $token = $user->createToken($request->input('email'))->plainTextToken;

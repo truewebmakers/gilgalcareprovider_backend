@@ -32,9 +32,9 @@ Route::get('listing/get-pb/all', [BusinessListingController::class, 'index']);
 Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessListing']);
 Route::get('listing/get-pb/{id}', [BusinessListingController::class, 'show']);
 
-Route::get('listing/stats/{id}', [BusinessListingController::class, 'getListingStats']);
-Route::post('listing/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
-Route::post('listing/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
+Route::get('/stats/{id}', [BusinessListingController::class, 'getListingStats']);
+Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
+Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
 
 
 

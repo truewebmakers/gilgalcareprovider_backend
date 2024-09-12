@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('user_type',['admin','business'])->default('business');
+            $table->enum('user_type',['admin','business','user'])->default('user');
             $table->text('notes')->nullable();
             $table->string('profile_pic')->nullable();
             $table->string('fb_link')->nullable();

@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('listing_views', function (Blueprint $table) {
             Schema::create('listing_views', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('business_listing_id');
                 $table->string('ip_address')->unique();
-                $table->timestamps();
-
+                $table->unsignedBigInteger('business_listing_id');
                 $table->foreign('business_listing_id')->references('id')->on('business_listings')->onDelete('cascade');
-             });
-        });
+                $table->timestamps();
+              });
+
     }
 
     /**

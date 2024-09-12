@@ -74,8 +74,7 @@ class FeedbackController extends Controller
 
     public function getFeedback($id)
     {
-        $feedback = Feedbacks::find($id);
-
+        $feedback = Feedbacks::where($id);
         if (!$feedback) {
             return response()->json([
                 'message' => 'Feedback not found',
@@ -87,5 +86,5 @@ class FeedbackController extends Controller
         ], 200);
     }
 
-   
+
 }
