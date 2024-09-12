@@ -120,9 +120,15 @@ class BusinessListingController extends Controller
      */
     public function show($id)
     {
-        $listing = BusinessListing::with('category', 'meta')->where(['uuid' => $id]);
+        $listing = BusinessListing::with(['category', 'meta'])->where('uuid', $id)->first();
 
         if (!$listing) {
+            // If no listing found by uuid, try finding by id
+            $listing = BusinessListing::with(['category', 'meta'])->where('id', $id)->first();
+        }
+
+        if (!$listing) {
+            // If still no listing found, return 404
             return response()->json([
                 'status' => false,
                 'message' => 'Business listing not found.',
