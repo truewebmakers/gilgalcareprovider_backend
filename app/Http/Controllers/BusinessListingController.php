@@ -60,6 +60,16 @@ class BusinessListingController extends Controller
             'added_by' => 'required',
             'status' => 'required',
             'gallery_images.0' => 'required',
+
+            'business_open_hours' => 'required|array',
+            'business_open_hours.Monday' => 'required|array',
+            'business_open_hours.Tuesday' => 'required|array',
+            // Add validation rules for other days as needed
+            'business_open_hours.*.isOpen' => 'required|boolean',
+            'business_open_hours.*.open_at' => 'required|string',
+            'business_open_hours.*.close_at' => 'required|string',
+
+
         ]);
 
         // return response()->json([
@@ -171,6 +181,19 @@ class BusinessListingController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'status' => 'required',
             'gallery_images.0' => 'required',
+
+            'business_open_hours' => 'required|array',
+            'business_open_hours.Monday' => 'required|array',
+            'business_open_hours.Tuesday' => 'required|array',
+            // Add validation rules for other days as needed
+            'business_open_hours.*.isOpen' => 'required|boolean',
+            'business_open_hours.*.open_at' => 'required|string',
+            'business_open_hours.*.close_at' => 'required|string',
+
+
+
+
+
         ]);
 
         $listing = BusinessListing::find($id);
