@@ -184,12 +184,12 @@ class BusinessListingController extends Controller
             'gallery_images.0' => 'required',
 
             'business_open_hours' => 'required|array',
-            'business_open_hours.Monday' => 'required|array',
-            'business_open_hours.Tuesday' => 'required|array',
-            // Add validation rules for other days as needed
-            'business_open_hours.*.isOpen' => 'required|boolean',
-            'business_open_hours.*.open_at' => 'required|string',
-            'business_open_hours.*.close_at' => 'required|string',
+            // 'business_open_hours.Monday' => 'required|array',
+            // 'business_open_hours.Tuesday' => 'required|array',
+            // // Add validation rules for other days as needed
+            // 'business_open_hours.*.isOpen' => 'required|boolean',
+            // 'business_open_hours.*.open_at' => 'required|string',
+            // 'business_open_hours.*.close_at' => 'required|string',
 
 
 
@@ -225,6 +225,7 @@ class BusinessListingController extends Controller
             $file = $request->file('logo');
             $data['logo'] = $file->store('listing_logos', 'public');
         }
+        $data['business_open_hours'] =  $request->business_open_hours ;
 
         $listing->update($data);
 
