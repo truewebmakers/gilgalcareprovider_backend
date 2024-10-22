@@ -38,6 +38,10 @@ class BusinessListing extends Model
         'total_shares',
     ];
 
+    protected $casts = [
+        'business_open_hours' => 'array', // or 'json' depending on your version
+    ];
+
     public function getLogoAttribute($value)
     {
         if ($value) {
