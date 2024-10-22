@@ -36,6 +36,7 @@ class BusinessListing extends Model
         'status',
         'page_views',
         'total_shares',
+        'business_open_hours'
     ];
 
     protected $casts = [

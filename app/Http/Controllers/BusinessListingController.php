@@ -88,6 +88,7 @@ class BusinessListingController extends Controller
             $file = $request->file('logo');
             $data['logo'] = $file->store('listing_logos', 'public');
         }
+        $data['business_open_hours'] =  json_encode($request->business_open_hours) ;
 
         $listing = BusinessListing::create($data);
         $listingId = $listing->id;
