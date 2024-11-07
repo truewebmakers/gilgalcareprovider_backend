@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('business_listings', function (Blueprint $table) {
             //
-             $table->json('business_open_hours')->nullable();
+            //  $table->json('business_open_hours')->nullable();
         });
     }
 
