@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     FeedbackController,
     ImageController,
     DashboardController,
-    SubscriptionController
+    SubscriptionController,
+    SubscriptionPlanController
 
 };
 
@@ -55,6 +56,14 @@ Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'in
 Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
 
 
+
+Route::middleware('auth:sanctum')->prefix('plan')->group(function () {
+    Route::post('/store', [SubscriptionPlanController::class, 'store']);
+    Route::post('/update/{id}', [SubscriptionPlanController::class, 'update']);
+    Route::post('/delete/{id}', [SubscriptionPlanController::class, 'destroy']);
+    Route::get('/get', [SubscriptionPlanController::class, 'index']);
+
+});
 
 Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/get/all/{id}', [BusinessListingController::class, 'index']); // Get all listings
