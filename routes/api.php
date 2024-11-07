@@ -26,7 +26,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // create subscription
 
-Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
+Route::post('/create/subsscription', [SubscriptionController::class, 'createSubscription']);
 
 
 

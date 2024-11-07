@@ -8,12 +8,21 @@ use Stripe\Customer;
 use Stripe\PaymentMethod;
 use Stripe\Subscription;
 use App\Models\{User,SubscriptionPlan};
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
     public function createSubscription(Request $request)
     {
-        $user = auth()->user();
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id', // Check if user exists
+            'plan_id' => 'required|integer|exists:subscription_plans,id', // Check if plan exists
+            'payment_method' => 'required|string', // Check if payment method is provided
+        ]);
+
+
+        $userId = $request->input('user_id');
+        $user = User::find($userId);
         $plan = SubscriptionPlan::findOrFail($request->plan_id);
 
         Stripe::setApiKey(config('services.stripe.secret'));
