@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +29,7 @@ class User extends Authenticatable
         'fb_link',
         'twitter_link',
         'googleplus_link',
-        'insta_link'
+        'insta_link','stripe_customer_id'
     ];
 
     /**
@@ -47,7 +47,7 @@ class User extends Authenticatable
     {
         if ($value) {
             // Prepend your AWS S3 bucket URL to the profile_pic path
-            return  config('constants.image_url'). $value;
+            return  config('constants.image_url') . $value;
         }
         return null;
     }
@@ -73,5 +73,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
     }
 }

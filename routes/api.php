@@ -3,7 +3,16 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{CategoryController, BusinessListingController, BusinessListingMetaController, FeedbackController,ImageController,DashboardController};
+use App\Http\Controllers\{
+    CategoryController,
+    BusinessListingController,
+    BusinessListingMetaController,
+    FeedbackController,
+    ImageController,
+    DashboardController,
+    SubscriptionController
+
+};
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -11,6 +20,15 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/signup', [UserController::class, 'signup'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
+
+
+
+// create subscription
+
+Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
+
+
+
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/update/profile/{id}', [UserController::class, 'updateProfile'])->name('update.profile');
     Route::post('/update/password/{id}', [UserController::class, 'updatePassword'])->name('update.password');
