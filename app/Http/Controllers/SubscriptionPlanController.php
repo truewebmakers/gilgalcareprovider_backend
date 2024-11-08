@@ -24,13 +24,13 @@ class SubscriptionPlanController extends Controller
     {
         Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
         // Stripe::setApiKey(config('services.stripe.secret'));
-        return response()->json(['message' => 'Plan created successfully', 'plan' => $request->all()]);
+        // return response()->json(['message' => 'Plan created successfully', 'plan' => $request->all()]);
 
         $request->validate([
             'name' => 'required|string',
             'term' => 'required|string',
             'price' => 'required|numeric',
-            'features' => 'required|array', // Validate features as an array
+            'features' => 'required', // Validate features as an array
         ]);
 
         $StripeProduct = Product::create([
