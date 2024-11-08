@@ -23,9 +23,9 @@ class SubscriptionController extends Controller
 
         $userId = $request->input('user_id');
         $user = User::find($userId);
-        $plan = SubscriptionPlan::findOrFail($request->plan_id);
+        $plan = SubscriptionPlan::where('uuid' , $request->plan_id)->get()->first();
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(config('services.stripe.webhook_secret'));
 
         // Create Stripe customer if not already created
         if (!$user->stripe_customer_id) {
