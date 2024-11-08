@@ -22,7 +22,10 @@ class SubscriptionPlanController extends Controller
 
     public function store(Request $request)
     {
-        Stripe::setApiKey('pk_test_51P2poYFOjqYjuziSQehIuAQksSaw3hKCtNnK5r7mrLs5xwS6ULXbNQJCDmPwdUISPMzqvxdMvzl5g2sHZHpDk4zq00YjLu4h6C');
+        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
+        // Stripe::setApiKey(config('services.stripe.secret'));
+
+
         $request->validate([
             'name' => 'required|string',
             'term' => 'required|string',
