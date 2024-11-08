@@ -24,7 +24,7 @@ class SubscriptionPlanController extends Controller
     {
         Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
         // Stripe::setApiKey(config('services.stripe.secret'));
-
+        return response()->json(['message' => 'Plan created successfully', 'plan' => $request->all()]);
 
         $request->validate([
             'name' => 'required|string',

@@ -13,7 +13,7 @@ class SubscriptionPlan extends Model
         'name',
         'price',
         'term',
-        'stripe_price_id'
+        'stripe_price_id','features'
     ];
 
     protected $casts = [
