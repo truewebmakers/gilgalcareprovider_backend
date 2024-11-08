@@ -22,7 +22,7 @@ class SubscriptionPlanController extends Controller
 
     public function store(Request $request)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         $request->validate([
             'name' => 'required|string',
             'term' => 'required|string',
