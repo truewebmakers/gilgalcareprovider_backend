@@ -16,7 +16,7 @@ class SubscriptionController extends Controller
     {
         $request->validate([
             'user_id' => 'required|integer|exists:users,id', // Check if user exists
-            'plan_id' => 'required|integer|exists:subscription_plans,id', // Check if plan exists
+            'plan_id' => 'required|exists:subscription_plans,uuid', // Check if plan exists
             'payment_method' => 'required|string', // Check if payment method is provided
         ]);
 
