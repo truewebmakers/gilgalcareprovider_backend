@@ -13,9 +13,14 @@ class SubscriptionPlanController extends Controller
 {
     //
 
-    public function index($planId)
+    public function index($planId="")
     {
-        $plans = SubscriptionPlan::find($planId);
+        if($planId){
+            $plans = SubscriptionPlan::find($planId);
+        }else{
+            $plans = SubscriptionPlan::get();
+        }
+
         return response()->json(['plans' => $plans]);
     }
 

@@ -61,6 +61,7 @@ Route::middleware('auth:sanctum')->prefix('plan')->group(function () {
     Route::post('/store', [SubscriptionPlanController::class, 'store']);
     Route::post('/update/{id}', [SubscriptionPlanController::class, 'update']);
     Route::post('/delete/{id}', [SubscriptionPlanController::class, 'destroy']);
+    Route::get('/getall', [SubscriptionPlanController::class, 'index']);
     Route::get('/get/{plan_id}', [SubscriptionPlanController::class, 'index']);
 
 });
