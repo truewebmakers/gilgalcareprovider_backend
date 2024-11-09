@@ -76,10 +76,26 @@ class SubscriptionPlanController extends Controller
 
         // Update Stripe Product if name is provided
         if ($request->has('name')) {
-            $stripeProduct = Product::retrieve($plan->stripe_price_id);
+            // Step 1: Retrieve the Price object
+            $stripePrice = Price::retrieve($plan->stripe_price_id);
+
+            // Step 2: Get the associated Product ID from the Price object
+            $productId = $stripePrice->product;
+
+            // Step 3: Retrieve the Product object using the Product ID
+            $stripeProduct = Product::retrieve($productId);
+
+            // Step 4: Update the Product's name
             $stripeProduct->name = $request->name;
             $stripeProduct->save();
         }
+
+
+        // if ($request->has('name')) {
+        //     $stripeProduct = Product::retrieve($plan->stripe_price_id);
+        //     $stripeProduct->name = $request->name;
+        //     $stripeProduct->save();
+        // }
 
         // Update Stripe Price if price or term is provided
         if ($request->has('price') || $request->has('term')) {
