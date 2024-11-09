@@ -63,7 +63,7 @@ class SubscriptionPlanController extends Controller
 
     public function update(Request $request, $id)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
 
         $request->validate([
             'name' => 'sometimes|required|string',
@@ -106,7 +106,7 @@ class SubscriptionPlanController extends Controller
 
     public function destroy($id)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
 
         $plan = SubscriptionPlan::findOrFail($id);
 
