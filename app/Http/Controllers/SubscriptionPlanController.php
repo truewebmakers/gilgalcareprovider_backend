@@ -111,11 +111,11 @@ class SubscriptionPlanController extends Controller
         $plan = SubscriptionPlan::findOrFail($id);
 
         // Delete Stripe Price and Product
-        $stripePrice = Price::retrieve($plan->stripe_price_id);
-        $stripeProduct = Product::retrieve($stripePrice->product);
+      //  $stripePrice = Price::retrieve($plan->stripe_price_id);
+      //  $stripeProduct = Product::retrieve($stripePrice->product);
 
         // $stripePrice->delete();
-        $stripeProduct->delete();
+    //    $stripeProduct->delete();
 
         // Delete from local database
         $plan->delete();
