@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{BusinessListing,BusinessListingMeta};
+use App\Models\{BusinessListing, BusinessListingMeta};
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -88,12 +88,12 @@ class BusinessListingController extends Controller
             $file = $request->file('logo');
             $data['logo'] = $file->store('listing_logos', 'public');
         }
-        $data['business_open_hours'] =  $request->business_open_hours ;
+        $data['business_open_hours'] =  $request->business_open_hours;
 
         $listing = BusinessListing::create($data);
         $listingId = $listing->id;
 
-        if($request->has('gallery_images')){
+        if ($request->has('gallery_images')) {
             $this->finalizeListing($request, $listingId);
         }
 
@@ -114,7 +114,7 @@ class BusinessListingController extends Controller
             if (Storage::disk('public')->exists($tempPathFull)) {
                 $newPath = 'listing_gallery/' . $listingId . '/' . basename($tempPath);
                 Storage::disk('public')->move($tempPathFull, $newPath);
-                $data['gallery_image'] =$newPath;
+                $data['gallery_image'] = $newPath;
                 $data['business_listing_id'] = $listingId;
                 BusinessListingMeta::create($data);
             }
@@ -225,13 +225,13 @@ class BusinessListingController extends Controller
             $file = $request->file('logo');
             $data['logo'] = $file->store('listing_logos', 'public');
         }
-        $data['business_open_hours'] =  $request->business_open_hours ;
+        $data['business_open_hours'] =  $request->business_open_hours;
 
         $listing->update($data);
 
         $listingId = $id;
 
-        if($request->has('gallery_images')){
+        if ($request->has('gallery_images')) {
             $this->finalizeListing($request, $listingId);
         }
 
@@ -272,6 +272,20 @@ class BusinessListingController extends Controller
             'message' => 'Business listing deleted successfully.'
         ]);
     }
+
+    public function TopTenTrendingBusinessListing()
+    {
+        // Order by 'created_at' in descending order and limit to 10 results
+        $topTrending = BusinessListing::orderBy('created_at', 'desc') // Order by creation date (most recent first)
+            ->take(10) // Limit to top 10
+            ->get(); // Execute the query and fetch the results
+
+        return response()->json([
+            'message' => 'Business listing fetched successfully.',
+            'data' => $topTrending
+        ]);
+    }
+
 
     public function SearchBusinessListing(Request $request)
     {
@@ -359,8 +373,6 @@ class BusinessListingController extends Controller
             'message' => 'Business listing fetched successfully.',
             'data' => $businessListings
         ]);
-
-
     }
 
     public function incrementPageViews($id, Request $request)
@@ -375,8 +387,8 @@ class BusinessListingController extends Controller
 
         // Check if the IP address has already viewed this listing
         $hasViewed = ListingView::where('business_listing_id', $id)
-                                ->where('ip_address', $ipAddress)
-                                ->exists();
+            ->where('ip_address', $ipAddress)
+            ->exists();
 
         if (!$hasViewed) {
             // Record the view and increment page views
