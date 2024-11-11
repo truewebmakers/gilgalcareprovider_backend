@@ -56,12 +56,12 @@ Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'in
 Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
 
 
-
+Route::get('/plan/getall', [SubscriptionPlanController::class, 'index']);
 Route::middleware('auth:sanctum')->prefix('plan')->group(function () {
     Route::post('/store', [SubscriptionPlanController::class, 'store']);
     Route::post('/update/{id}', [SubscriptionPlanController::class, 'update']);
     Route::post('/delete/{id}', [SubscriptionPlanController::class, 'destroy']);
-    Route::get('/getall', [SubscriptionPlanController::class, 'index']);
+
     Route::get('/get/{plan_id}', [SubscriptionPlanController::class, 'index']);
 
 });
