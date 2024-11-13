@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{SubscriptionPlan,User};
+use App\Models\{SubscriptionPlan, User};
 use Illuminate\Http\Request;
 
 use Stripe\Stripe;
@@ -11,15 +11,17 @@ use Stripe\Price;
 use Stripe\Subscription;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
+use Carbon\Carbon;  // To handle date formatting
+
 class SubscriptionPlanController extends Controller
 {
     //
 
-    public function index($planId="")
+    public function index($planId = "")
     {
-        if($planId){
+        if ($planId) {
             $plans = SubscriptionPlan::find($planId);
-        }else{
+        } else {
             $plans = SubscriptionPlan::get();
         }
 
@@ -132,8 +134,8 @@ class SubscriptionPlanController extends Controller
         $stripeProduct = Product::retrieve($productId);
 
 
-         $stripePrice->delete();
-         $stripeProduct->delete();
+        $stripePrice->delete();
+        $stripeProduct->delete();
 
         // Delete from local database
         $plan->delete();
@@ -181,13 +183,25 @@ class SubscriptionPlanController extends Controller
             // $subscription = $subscriptions[0]; // Assuming the first subscription is the active one
             $currentPlan = $subscription->items->data[0]->plan->nickname; // Get the plan nickname
 
+            $startDate = Carbon::createFromTimestamp($subscription['start_date']);
+            $endDate = Carbon::createFromTimestamp($subscription['current_period_end']);
+            $startFormatted = $startDate->format('j M Y g:ia');  // 1 Nov 2024 12:25pm
+            $endFormatted = $endDate->format('j M Y g:ia');
+
+            $planId = $subscription['items']['data'][0]['plan']['id'];
+            $currency = $subscription['items']['data'][0]['plan']['currency'];
+
             return response()->json([
                 'current_plan' => $user->subscription->name,
                 'subscription_status' => $subscription->status,
                 'subscription_id' => $subscription->id,
+                'plan_status' => $subscription['status'],  // Plan Status
+                'plan_started_at' => $startFormatted,      // Plan Start Date
+                'plan_ends_at' => $endFormatted,           // Plan End Date
+                'plan_id' => $planId,
+                'currency' => $currency,
                 'subscription_detail' => $subscription
             ]);
-
         } catch (ApiErrorException $e) {
             return response()->json(['error' => 'Failed to fetch subscription details', 'message' => $e->getMessage()], 500);
         }
@@ -219,7 +233,6 @@ class SubscriptionPlanController extends Controller
                 'message' => 'Subscription has been successfully cancelled.',
                 'subscription_id' => $subscription->id
             ]);
-
         } catch (ApiErrorException $e) {
             return response()->json(['error' => 'Failed to cancel subscription', 'message' => $e->getMessage()], 500);
         }
