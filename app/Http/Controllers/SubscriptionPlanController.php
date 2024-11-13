@@ -165,20 +165,20 @@ class SubscriptionPlanController extends Controller
             // Retrieve the customer from Stripe
             // $customer = Customer::retrieve($user->stripe_customer_id);
 
-            // $subscriptions = $customer->subscriptions->data;
-            return response()->json([
-                'current_plan' => $subscription,
-            ]);
+            //  $subscriptions = $subscription->subscriptions->data;
+            // return response()->json([
+            //     'current_plan' => $subscription,
+            // ]);
 
-            // Retrieve subscriptions for the user
+            // // Retrieve subscriptions for the user
 
 
-            if (empty($subscriptions)) {
-                return response()->json(['message' => 'No active subscriptions found'], 404);
-            }
+            // if (empty($subscriptions)) {
+            //     return response()->json(['message' => 'No active subscriptions found'], 404);
+            // }
 
-            // Get the current subscription
-            $subscription = $subscriptions[0]; // Assuming the first subscription is the active one
+            // // Get the current subscription
+            // $subscription = $subscriptions[0]; // Assuming the first subscription is the active one
             $currentPlan = $subscription->items->data[0]->plan->nickname; // Get the plan nickname
 
             return response()->json([
