@@ -162,6 +162,11 @@ class SubscriptionPlanController extends Controller
             // Retrieve the customer from Stripe
             $customer = Customer::retrieve($user->stripe_customer_id);
 
+
+            return response()->json([
+                'current_plan' => $customer,
+            ]);
+
             // Retrieve subscriptions for the user
             $subscriptions = $customer->subscriptions->data;
 
