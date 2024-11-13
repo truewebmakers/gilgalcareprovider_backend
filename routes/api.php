@@ -36,6 +36,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/update/password/{id}', [UserController::class, 'updatePassword'])->name('update.password');
     Route::get('/getProfile/{id}', [UserController::class, 'getProfile'])->name('get.profile');
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+    Route::post('/get-current-plan', [SubscriptionPlanController::class, 'getCurrentPlan']);
+    Route::post('/cancel-subscription', [SubscriptionPlanController::class, 'cancelSubscription']);
 });
 
 Route::get('categories/get-pb/all', [CategoryController::class, 'index']);

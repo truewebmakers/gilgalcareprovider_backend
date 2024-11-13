@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SubscriptionPlan;
+use App\Models\{SubscriptionPlan,User};
 use Illuminate\Http\Request;
 
 use Stripe\Stripe;
 use Stripe\Product;
 use Stripe\Price;
-
+use Stripe\Subscription;
+use Stripe\Customer;
+use Stripe\Exception\ApiErrorException;
 class SubscriptionPlanController extends Controller
 {
     //
@@ -27,9 +29,6 @@ class SubscriptionPlanController extends Controller
 
     public function store(Request $request)
     {
-        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
-        // Stripe::setApiKey(config('services.stripe.secret'));
-        // return response()->json(['message' => 'Plan created successfully', 'plan' => $request->all()]);
 
         $request->validate([
             'name' => 'required|string',
@@ -63,7 +62,6 @@ class SubscriptionPlanController extends Controller
 
     public function update(Request $request, $id)
     {
-        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
 
         $request->validate([
             'name' => 'sometimes|required|string',
@@ -122,7 +120,6 @@ class SubscriptionPlanController extends Controller
 
     public function destroy($id)
     {
-        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
 
         $plan = SubscriptionPlan::findOrFail($id);
 
@@ -142,5 +139,80 @@ class SubscriptionPlanController extends Controller
         $plan->delete();
 
         return response()->json(['message' => 'Plan deleted successfully']);
+    }
+
+    public function getCurrentPlan(Request $request)
+    {
+        // Validate the incoming request to ensure 'stripe_customer_id' is provided
+        $request->validate([
+            'stripe_customer_id' => 'required|exists:users,stripe_customer_id',
+        ]);
+
+        // Get the user based on the provided stripe_customer_id
+        $user = User::where('stripe_customer_id', $request->stripe_customer_id)->first();
+
+        if (!$user || !$user->stripe_customer_id) {
+            return response()->json(['error' => 'User not found or no stripe customer ID'], 404);
+        }
+
+        // Set Stripe secret key
+
+
+        try {
+            // Retrieve the customer from Stripe
+            $customer = Customer::retrieve($user->stripe_customer_id);
+
+            // Retrieve subscriptions for the user
+            $subscriptions = $customer->subscriptions->data;
+
+            if (empty($subscriptions)) {
+                return response()->json(['message' => 'No active subscriptions found'], 404);
+            }
+
+            // Get the current subscription
+            $subscription = $subscriptions[0]; // Assuming the first subscription is the active one
+            $currentPlan = $subscription->items->data[0]->plan->nickname; // Get the plan nickname
+
+            return response()->json([
+                'current_plan' => $currentPlan,
+                'subscription_status' => $subscription->status,
+                'subscription_id' => $subscription->id
+            ]);
+
+        } catch (ApiErrorException $e) {
+            return response()->json(['error' => 'Failed to fetch subscription details', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function cancelSubscription(Request $request)
+    {
+        // Validate the incoming request to ensure 'stripe_customer_id' is provided
+        $request->validate([
+            'stripe_customer_id' => 'required|exists:users,stripe_customer_id',
+            'subscription_id' => 'required|string'
+        ]);
+
+        // Get the user based on the provided stripe_customer_id
+        $user = User::where('stripe_customer_id', $request->stripe_customer_id)->first();
+
+        if (!$user || !$user->stripe_customer_id) {
+            return response()->json(['error' => 'User not found or no stripe customer ID'], 404);
+        }
+
+        try {
+            // Retrieve the subscription from Stripe
+            $subscription = Subscription::retrieve($request->subscription_id);
+
+            // Cancel the subscription immediately
+            $subscription->cancel();
+
+            return response()->json([
+                'message' => 'Subscription has been successfully cancelled.',
+                'subscription_id' => $subscription->id
+            ]);
+
+        } catch (ApiErrorException $e) {
+            return response()->json(['error' => 'Failed to cancel subscription', 'message' => $e->getMessage()], 500);
+        }
     }
 }
