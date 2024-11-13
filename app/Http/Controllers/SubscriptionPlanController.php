@@ -200,7 +200,7 @@ class SubscriptionPlanController extends Controller
                 'plan_ends_at' => $endFormatted,           // Plan End Date
                 'plan_id' => $planId,
                 'currency' => $currency,
-                'subscription_detail' => $subscription
+               //  'subscription_detail' => $subscription
             ]);
         } catch (ApiErrorException $e) {
             return response()->json(['error' => 'Failed to fetch subscription details', 'message' => $e->getMessage()], 500);
