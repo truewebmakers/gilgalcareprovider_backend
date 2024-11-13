@@ -130,6 +130,22 @@ class UserController extends Controller
 
     }
 
+    public function checkEmail(Request $request)
+    {
+        // Validate the incoming request to ensure 'email' is provided and is a valid email
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Check if email exists in the 'users' table
+        $emailExists = User::where('email', $request->email)->exists();
+
+        // Return response
+        return response()->json([
+            'exists' => ($emailExists) ? 'exists' : 'not_exists'
+        ]);
+    }
+
     public function logout(Request $request)
     {
 
