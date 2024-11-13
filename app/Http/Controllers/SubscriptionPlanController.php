@@ -149,7 +149,7 @@ class SubscriptionPlanController extends Controller
         ]);
 
         // Get the user based on the provided stripe_customer_id
-        $user = User::where('stripe_customer_id', $request->stripe_customer_id)->first();
+        $user = User::with('subscription')->where('stripe_customer_id', $request->stripe_customer_id)->first();
 
         if (!$user || !$user->stripe_customer_id) {
             return response()->json(['error' => 'User not found or no stripe customer ID'], 404);
@@ -159,16 +159,19 @@ class SubscriptionPlanController extends Controller
 
 
         try {
+
+            $subscription = Subscription::retrieve($user->subscription->stripe_subscription_id);
+
             // Retrieve the customer from Stripe
-            $customer = Customer::retrieve($user->stripe_customer_id);
+            // $customer = Customer::retrieve($user->stripe_customer_id);
 
-
+            // $subscriptions = $customer->subscriptions->data;
             return response()->json([
-                'current_plan' => $customer,
+                'current_plan' => $subscription,
             ]);
 
             // Retrieve subscriptions for the user
-            $subscriptions = $customer->subscriptions->data;
+
 
             if (empty($subscriptions)) {
                 return response()->json(['message' => 'No active subscriptions found'], 404);
