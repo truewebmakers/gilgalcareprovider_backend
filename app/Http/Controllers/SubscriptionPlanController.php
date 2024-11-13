@@ -182,9 +182,10 @@ class SubscriptionPlanController extends Controller
             $currentPlan = $subscription->items->data[0]->plan->nickname; // Get the plan nickname
 
             return response()->json([
-                'current_plan' => $currentPlan,
+                'current_plan' => $user->subscription->name,
                 'subscription_status' => $subscription->status,
-                'subscription_id' => $subscription->id
+                'subscription_id' => $subscription->id,
+                'subscription_detail' => $subscription
             ]);
 
         } catch (ApiErrorException $e) {
