@@ -188,6 +188,15 @@ class UserController extends Controller
         }
     }
 
+    public function FetchContactFormEntires(){
+        $entries = ContactFormEntry::orderBy('id','desc')->get();
+        return response()->json([
+            'message' => 'Fetched Sent' ,
+            'data' => $entries,
+            'status' => true
+        ]);
+    }
+
 
 
 }

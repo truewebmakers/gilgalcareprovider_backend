@@ -42,6 +42,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
     Route::post('/get-current-plan', [SubscriptionPlanController::class, 'getCurrentPlan']);
     Route::post('/cancel-subscription', [SubscriptionPlanController::class, 'cancelSubscription']);
+
+    Route::get('/get-contactform-entries', [UserController::class, 'FetchContactFormEntires'])->name('get.contact.form.entry');
+
 });
 
 Route::get('categories/get-pb/all', [CategoryController::class, 'index']);
