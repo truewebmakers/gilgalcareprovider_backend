@@ -142,7 +142,7 @@ class UserController extends Controller
 
         // Return response
         return response()->json([
-            'exists' => ($emailExists) ? 'exists' : 'not_exists'
+            'exists' => ($emailExists) ? true : false
         ]);
     }
 
