@@ -20,6 +20,6 @@ class StripeServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Stripe::setApiKey(env('STRIPE_WEBHOOK_SECRET'));
+        Stripe::setApiKey('sk_test_51P2poYFOjqYjuziSfdIFxl7rdUrrNkIhm00XeHPVjKCeWIIGaoSPzRQKNq4pWzezAaVA8Y0LmpJGazSMYgvotkpH00OAhOSnb4');
     }
 }
