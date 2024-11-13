@@ -22,6 +22,9 @@ Route::get('/user', function (Request $request) {
 Route::post('/signup', [UserController::class, 'signup'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::post('/check-email', [UserController::class, 'checkEmail'])->name('email');
+Route::post('/send-email', [UserController::class, 'sendEmail'])->name('sendEmail');
+
+
 
 
 

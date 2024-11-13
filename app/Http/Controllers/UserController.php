@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\{User,ContactFormEntry};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use App\Mail\SendContactUs;
+use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
     public function login(Request $request)
@@ -154,6 +155,37 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Successfully logged out' ,'status' => true
         ]);
+    }
+
+    public function sendEmail(Request $request)
+    {
+        try {
+            $request->validate([
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'subject' => 'required',
+                'email' => 'required',
+                'phone' => 'required',
+                'query' => 'required'
+
+            ]);
+            $post = $request->only(['first_name', 'last_name', 'subject', 'email', 'phone' ,'query']);
+
+            $email = $request->input('email');
+            $adminEmail = env('MAIL_ADMIN_EMAIL');
+            Mail::to($adminEmail) ->cc($email)->send(new SendContactUs(data: $post));
+
+            ContactFormEntry::create( $post );
+            return response()->json([
+                'message' => 'Email Sent' ,
+                'status' => true
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage() ,
+                'status' => true
+            ]);
+        }
     }
 
 
