@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\{Availablitities};
+use Illuminate\Support\Facades\Validator;
+class AvailablititiesController extends Controller
+{
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'listing_id' => 'required|exists:business_listings,id',
+            'availability' => 'required|array',
+            'availability.*.is_enabled' => 'required|boolean',
+            // 'availability.*.times' => 'array', // Ensure 'times' is an array
+            // 'availability.*.times.*.start_time' => 'required|date_format:H:i',
+            // 'availability.*.times.*.end_time' => 'required|date_format:H:i|after:availability.*.times.*.start_time',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Delete any existing availability for this translator
+        Availablitities::where('translator_id', $request->translator_id)->delete();
+
+        // Save new availability data
+        foreach ($request->availability as $day => $data) {
+            $isEnabled = $data['is_enabled']; // Get the `is_enabled` status for the day
+
+            foreach ($data['times'] as $timeSlot) {
+                Availablitities::updateOrInsert(
+                    [
+                        'translator_id' => $request->translator_id,
+                        'day' => $day,
+                        'start_time' => $timeSlot['start_time']
+                    ],
+                    [
+                        'end_time' => $timeSlot['end_time'],
+                        'is_enabled' => $isEnabled, // Add `is_enabled` value
+                        'updated_at' => now(),
+                    ]
+                );
+            }
+        }
+
+        return response()->json(['message' => 'Availability added successfully'], 201);
+    }
+
+    public function index($translatorId)
+    {
+        $availability = Availablitities::where('translator_id', $translatorId)->get();
+        return response()->json(['data' => $availability]);
+    }
+
+    public function getSlots( Request $request )
+    {
+        $validator = validator::make($request->all(), [
+            'translator_id' => 'required',
+            'day' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $translatorId =  $request->input('translator_id');
+        $day =  $request->input('day');
+        $availability = Availablitities::where(['translator_id' => $translatorId ,'day' => $day])->get();
+        return response()->json(['data' => $availability]);
+    }
+}

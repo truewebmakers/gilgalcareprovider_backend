@@ -11,7 +11,8 @@ use App\Http\Controllers\{
     ImageController,
     DashboardController,
     SubscriptionController,
-    SubscriptionPlanController
+    SubscriptionPlanController,
+    AvailablititiesController
 
 };
 
@@ -24,25 +25,17 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::post('/check-email', [UserController::class, 'checkEmail'])->name('email');
 Route::post('/send-email', [UserController::class, 'sendEmail'])->name('sendEmail');
 
-
-
-
-
 // create subscription
 
 Route::post('/create/subsscription', [SubscriptionController::class, 'createSubscription']);
-
-
 
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/update/profile/{id}', [UserController::class, 'updateProfile'])->name('update.profile');
     Route::post('/update/password/{id}', [UserController::class, 'updatePassword'])->name('update.password');
     Route::get('/getProfile/{id}', [UserController::class, 'getProfile'])->name('get.profile');
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-
     Route::post('/get-current-plan', [SubscriptionPlanController::class, 'getCurrentPlan']);
     Route::post('/cancel-subscription', [SubscriptionPlanController::class, 'cancelSubscription']);
-
     Route::get('/get-contactform-entries', [UserController::class, 'FetchContactFormEntires'])->name('get.contact.form.entry');
 
 });
@@ -62,8 +55,6 @@ Route::get('listing/search', [BusinessListingController::class, 'SearchBusinessL
 Route::get('listing/get-pb/{id}', [BusinessListingController::class, 'show']);
 Route::get('listing/top-ten-trending', [BusinessListingController::class, 'TopTenTrendingBusinessListing']);
 
-
-
 Route::get('/stats/{id}', [BusinessListingController::class, 'getListingStats']);
 Route::post('/increment-page-views/{id}', [BusinessListingController::class, 'incrementPageViews']);
 Route::post('/increment-shares/{id}', [BusinessListingController::class, 'incrementShares']);
@@ -74,7 +65,6 @@ Route::middleware('auth:sanctum')->prefix('plan')->group(function () {
     Route::post('/store', [SubscriptionPlanController::class, 'store']);
     Route::post('/update/{id}', [SubscriptionPlanController::class, 'update']);
     Route::post('/delete/{id}', [SubscriptionPlanController::class, 'destroy']);
-
     Route::get('/get/{plan_id}', [SubscriptionPlanController::class, 'index']);
 
 });
@@ -86,8 +76,6 @@ Route::middleware('auth:sanctum')->prefix('listing')->group(function () {
     Route::post('/update/{id}', [BusinessListingController::class, 'update']); // Update a specific listing
     Route::delete('/delete/{id}', [BusinessListingController::class, 'destroy']); // Delete a specific listing
     Route::post('/upload-image', [ImageController::class, 'uploadTemporaryImage']);
-
-
 });
 
 // Routes for Business Listing Meta CRUD operations
@@ -105,8 +93,6 @@ Route::prefix('feedback')->group(function () {
     Route::get('/business/{businessListingId}', [FeedbackController::class, 'getFeedbackByBusinessListing']);
     Route::get('/get/{id}', [FeedbackController::class, 'getFeedback']);
 });
-
-
 // Route::middleware('auth:sanctum')->prefix('feedback')->group(function () {
 //     Route::post('/store', [FeedbackController::class, 'store']);
 //     Route::post('/update/{id}', [FeedbackController::class, 'update']);
@@ -117,4 +103,9 @@ Route::prefix('feedback')->group(function () {
 Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/review-count', [DashboardController::class, 'getReviewCount']);
     Route::get('/listing-count', [DashboardController::class, 'getListCounts']);
+});
+Route::middleware('auth:sanctum')->prefix('provider')->group(function () {
+    Route::post('/availability', [AvailablititiesController::class, 'store']);
+    Route::get('/availability/{id}', [AvailablititiesController::class, 'index']);
+    Route::post('/availability/get-slots', [AvailablititiesController::class, 'getSlots']);
 });

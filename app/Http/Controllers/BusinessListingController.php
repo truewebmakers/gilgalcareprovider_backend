@@ -61,7 +61,7 @@ class BusinessListingController extends Controller
             'status' => 'required',
             'gallery_images.0' => 'required',
 
-            'business_open_hours' => 'required|array',
+            // 'business_open_hours' => 'required|array',
             // 'business_open_hours.Monday' => 'required|array',
             // 'business_open_hours.Tuesday' => 'required|array',
             // Add validation rules for other days as needed
