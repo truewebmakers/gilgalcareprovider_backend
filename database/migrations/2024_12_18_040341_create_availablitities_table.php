@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('availablitities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('translator_id');
-            $table->foreign('translator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('listing_id');
+            $table->foreign('listing_id')->references('id')->on('business_listings')->onDelete('cascade');
             $table->enum('day', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
             $table->time('start_time');
             $table->time('end_time');
