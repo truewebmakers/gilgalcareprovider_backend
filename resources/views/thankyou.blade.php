@@ -12,7 +12,7 @@
         <div class="alert alert-success text-center shadow p-4 rounded">
             <h3 class="mb-4">Thank you for verifying your email!</h3>
             <p class="fs-4">{{ $message }}</p>
-            <a href="https://speakmydialect.com.au" class="btn btn-primary mt-3">Click here to go to the homepage</a>
+            <a href="https://gilgalcareprovider.hyperiontech.com.au/" class="btn btn-primary mt-3">Click here to go to the homepage</a>
         </div>
     </div>
 
