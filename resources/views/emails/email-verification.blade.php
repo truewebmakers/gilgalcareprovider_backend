@@ -23,8 +23,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <img src="<img src="https://gilgalcareprovider.s3.ap-southeast-1.amazonaws.com/logo/logo-bgr.png" class="img-fluid" alt="Logo">" height="50px"
-                                style="display:block; margin:auto;padding-bottom: 25px; ">
+                            <img src="https://gilgalcareprovider.s3.ap-southeast-1.amazonaws.com/logo/logo-bgr.png" height="50px"
+                            style="display:block; margin:auto;padding-bottom: 25px; " class="img-fluid" alt="Logo">
                         </td>
                     </tr>
                     <tr>

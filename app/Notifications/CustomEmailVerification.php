@@ -39,7 +39,7 @@ class CustomEmailVerification extends Notification
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-            ->subject('Email Verification - Speak My Dialect')
+            ->subject('Email Verification - Gilgal Care Provider')
             ->view('emails.email-verification', [
                 'user' => $notifiable,
                 'verificationUrl' => $verificationUrl
