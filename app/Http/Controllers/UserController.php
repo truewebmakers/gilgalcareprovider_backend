@@ -17,6 +17,12 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout(); // Log out the user
+                return response()->json(['message' => 'Please verify your email before logging in.'], 403);
+            }
+
+            $user = Auth::user();
             $User =  User::find($user->id);
             $token = $User->createToken($request->input('email'))->plainTextToken;
             return response()->json(['token' => $token,'userInfo' =>$user,  'message' => 'You’ve successfully logged in',], 200);
@@ -45,6 +51,7 @@ class UserController extends Controller
         ]);
 
         $token = $user->createToken($request->input('email'))->plainTextToken;
+        $user->sendEmailVerificationNotification();
         return response()->json(['token' => $token , 'userInfo' =>$user], 201);
     }
 
@@ -63,6 +70,29 @@ class UserController extends Controller
             ],422);
         }
     }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $user = User::where('email', $request->email)->first();
+
+        // Check if the email is already verified
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Your email is already verified.', 'status' => true], 422);
+        }
+
+        // Send the verification email
+        $user->sendEmailVerificationNotification();
+
+        return response()->json(['message' => 'A new verification link has been sent to your email address.', 'status' => true], 200);
+
+
+    }
+
+
+
 
     public function updateProfile(Request $request,$userId)
     {

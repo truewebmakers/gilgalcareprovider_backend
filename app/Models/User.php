@@ -9,7 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\CustomEmailVerification;
+
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
 
@@ -59,6 +63,11 @@ class User extends Authenticatable
                 $user->uuid = (string) Str::uuid();
             }
         });
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomEmailVerification());
     }
 
 
