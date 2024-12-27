@@ -456,8 +456,16 @@ class BusinessListingController extends Controller
         }
 
         // Filter by category_id
+        // if ($request->filled('category_id')) {
+        //     $query->where('category_id', $request->input('category_id'));
+        // }
+
         if ($request->filled('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
+            // Assuming 'category_id' is an array of category IDs to filter by
+            $categoryIds = $request->input('category_id');  // This can be an array of category IDs
+            $query->whereHas('categories', function ($q) use ($categoryIds) {
+                $q->whereIn('category_id', $categoryIds);
+            });
         }
 
         // Filter by added_by
