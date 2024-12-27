@@ -460,9 +460,12 @@ class BusinessListingController extends Controller
         //     $query->where('category_id', $request->input('category_id'));
         // }
 
+         // Filter by multiple categories (many-to-many relationship)
         if ($request->filled('category_id')) {
-            // Assuming 'category_id' is an array of category IDs to filter by
-            $categoryIds = $request->input('category_id');  // This can be an array of category IDs
+            // Retrieve all category_ids passed as query parameters (they will be in an array)
+            $categoryIds = $request->input('category_id');  // Automatically returns an array
+
+            // Filter BusinessListings that have the given categories
             $query->whereHas('categories', function ($q) use ($categoryIds) {
                 $q->whereIn('category_id', $categoryIds);
             });
