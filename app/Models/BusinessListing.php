@@ -43,9 +43,10 @@ class BusinessListing extends Model
         'business_open_hours' => 'array', // or 'json' depending on your version
     ];
 
+
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_listings');
+        return $this->belongsToMany(Category::class, 'category_listings', 'business_listing_id', 'category_id');
     }
 
     public function getLogoAttribute($value)
