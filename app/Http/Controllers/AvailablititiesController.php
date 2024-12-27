@@ -24,7 +24,7 @@ class AvailablititiesController extends Controller
         }
 
         // Delete any existing availability for this translator
-        Availablitities::where('translator_id', $request->translator_id)->delete();
+        Availablitities::where('listing_id', $request->listing_id)->delete();
 
         // Save new availability data
         foreach ($request->availability as $day => $data) {
@@ -33,7 +33,7 @@ class AvailablititiesController extends Controller
             foreach ($data['times'] as $timeSlot) {
                 Availablitities::updateOrInsert(
                     [
-                        'translator_id' => $request->translator_id,
+                        'listing_id' => $request->listing_id,
                         'day' => $day,
                         'start_time' => $timeSlot['start_time']
                     ],
@@ -51,22 +51,22 @@ class AvailablititiesController extends Controller
 
     public function index($translatorId)
     {
-        $availability = Availablitities::where('translator_id', $translatorId)->get();
+        $availability = Availablitities::where('listing_id', $translatorId)->get();
         return response()->json(['data' => $availability]);
     }
 
     public function getSlots( Request $request )
     {
         $validator = validator::make($request->all(), [
-            'translator_id' => 'required',
+            'listing_id' => 'required',
             'day' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $translatorId =  $request->input('translator_id');
+        $listing_id =  $request->input('listing_id');
         $day =  $request->input('day');
-        $availability = Availablitities::where(['translator_id' => $translatorId ,'day' => $day])->get();
+        $availability = Availablitities::where(['translator_id' => $listing_id ,'day' => $day])->get();
         return response()->json(['data' => $availability]);
     }
 }
