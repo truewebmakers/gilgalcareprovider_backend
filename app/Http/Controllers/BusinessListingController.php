@@ -76,7 +76,7 @@ class BusinessListingController extends Controller
         }
 
         // Create the listing without categories first
-        $listing = BusinessListing::create($data);
+        $listing = BusinessListing::create(attributes: $data);
         $listingId = $listing->id;
 
         // Attach multiple categories to the listing

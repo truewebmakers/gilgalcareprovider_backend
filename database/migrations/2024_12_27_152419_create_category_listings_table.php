@@ -15,16 +15,14 @@ return new class extends Migration
 
         Schema::create('category_listings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('listing_id');
-            $table->unsignedBigInteger('category_id');
-            $table->timestamps();
+            $table->unsignedBigInteger('business_listing_id'); // Foreign key for business_listing
+            $table->unsignedBigInteger('category_id'); // Foreign key for category
 
-            // Foreign key constraints
-            $table->foreign('listing_id')->references('id')->on('business_listings')->onDelete('cascade');
+            // Add foreign key constraints
+            $table->foreign('business_listing_id')->references('id')->on('business_listings')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
-            // Optional: to ensure no duplicate category-listing pair
-            $table->unique(['listing_id', 'category_id']);
+            $table->timestamps();
         });
     }
 
