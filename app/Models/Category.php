@@ -24,5 +24,9 @@ class Category extends Model
         }
         return null;
     }
+    public function businessListings()
+        {
+            return $this->belongsToMany(BusinessListing::class, 'category_listings');
+        }
 
 }

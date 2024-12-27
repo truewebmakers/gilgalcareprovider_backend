@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('uuid')->nullable();
             $table->string('listing_title');
             $table->text('listing_description');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            // $table->unsignedBigInteger('category_id');
+            // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('added_by');
             $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade');
             $table->string('tagline')->nullable();
@@ -42,6 +42,8 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->timestamps();
         });
+
+
     }
 
     /**

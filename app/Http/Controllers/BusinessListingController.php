@@ -33,18 +33,18 @@ class BusinessListingController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      */
+
     public function store(Request $request): JsonResponse
     {
+        // Update validation for multiple categories
         $request->validate([
             'listing_title' => 'required|string|max:255',
             'listing_description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|array',  // Change to array
+            'category_id.*' => 'exists:categories,id', // Ensure all provided IDs are valid categories
             'tagline' => 'nullable|string',
-            // 'price_range' => 'nullable|numeric',
-            // 'price_from' => 'nullable|numeric',
-            // 'price_to' => 'nullable|numeric',
             'features_information' => 'nullable|string',
-            'location' => 'required|string',
+            'location' => 'nullable',
             'address' => 'required|string',
             'map_lat' => 'nullable|numeric',
             'map_long' => 'nullable|numeric',
@@ -52,56 +52,121 @@ class BusinessListingController extends Controller
             'website' => 'required',
             'phone' => 'nullable|string',
             'facebook' => 'nullable',
-            // 'twitter' => 'nullable',
-            // 'google_plus' => 'nullable',
             'instagram' => 'nullable',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
             'added_by' => 'required',
             'status' => 'required',
             'gallery_images.0' => 'required',
-
-            // 'business_open_hours' => 'required|array',
-            // 'business_open_hours.Monday' => 'required|array',
-            // 'business_open_hours.Tuesday' => 'required|array',
-            // Add validation rules for other days as needed
-            // 'business_open_hours.*.isOpen' => 'required|boolean',
-            // 'business_open_hours.*.open_at' => 'required|string',
-            // 'business_open_hours.*.close_at' => 'required|string',
-
-
         ]);
 
-        // return response()->json([
-        //     'message' => 'Business listing created successfully.',
-        //     'listing' => $request->all()
-        // ]);
+        // Prepare the data (exclude files first)
+        $data = $request->except(['featured_image', 'logo', 'category_id']);
 
-        $data = $request->except(['featured_image', 'logo']);
-
+        // Handle featured image upload
         if ($request->hasFile('featured_image')) {
             $file = $request->file('featured_image');
             $data['featured_image'] = $file->store('listing_images', 'public');
         }
 
+        // Handle logo upload
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $data['logo'] = $file->store('listing_logos', 'public');
         }
-        $data['business_open_hours'] =  $request->business_open_hours;
 
+        // Create the listing without categories first
         $listing = BusinessListing::create($data);
         $listingId = $listing->id;
 
+        // Attach multiple categories to the listing
+        if ($request->has('category_id')) {
+            $listing->categories()->attach($request->category_id); // Attach the categories to the listing
+        }
+
+        // Handle gallery images if provided
         if ($request->has('gallery_images')) {
             $this->finalizeListing($request, $listingId);
         }
 
+        // Return a response with the created listing
         return response()->json([
             'message' => 'Business listing created successfully.',
             'listing' => $listing
         ]);
     }
+
+
+
+    // public function store(Request $request): JsonResponse
+    // {
+    //     $request->validate([
+    //         'listing_title' => 'required|string|max:255',
+    //         'listing_description' => 'required|string',
+    //         'category_id' => 'required|exists:categories,id',
+    //         'tagline' => 'nullable|string',
+    //         // 'price_range' => 'nullable|numeric',
+    //         // 'price_from' => 'nullable|numeric',
+    //         // 'price_to' => 'nullable|numeric',
+    //         'features_information' => 'nullable|string',
+    //         'location' => 'required|string',
+    //         'address' => 'required|string',
+    //         'map_lat' => 'nullable|numeric',
+    //         'map_long' => 'nullable|numeric',
+    //         'email' => 'nullable|email',
+    //         'website' => 'required',
+    //         'phone' => 'nullable|string',
+    //         'facebook' => 'nullable',
+    //         // 'twitter' => 'nullable',
+    //         // 'google_plus' => 'nullable',
+    //         'instagram' => 'nullable',
+    //         'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+    //         'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+    //         'added_by' => 'required',
+    //         'status' => 'required',
+    //         'gallery_images.0' => 'required',
+
+    //         // 'business_open_hours' => 'required|array',
+    //         // 'business_open_hours.Monday' => 'required|array',
+    //         // 'business_open_hours.Tuesday' => 'required|array',
+    //         // Add validation rules for other days as needed
+    //         // 'business_open_hours.*.isOpen' => 'required|boolean',
+    //         // 'business_open_hours.*.open_at' => 'required|string',
+    //         // 'business_open_hours.*.close_at' => 'required|string',
+
+
+    //     ]);
+
+    //     // return response()->json([
+    //     //     'message' => 'Business listing created successfully.',
+    //     //     'listing' => $request->all()
+    //     // ]);
+
+    //     $data = $request->except(['featured_image', 'logo']);
+
+    //     if ($request->hasFile('featured_image')) {
+    //         $file = $request->file('featured_image');
+    //         $data['featured_image'] = $file->store('listing_images', 'public');
+    //     }
+
+    //     if ($request->hasFile('logo')) {
+    //         $file = $request->file('logo');
+    //         $data['logo'] = $file->store('listing_logos', 'public');
+    //     }
+    //     $data['business_open_hours'] =  $request->business_open_hours;
+
+    //     $listing = BusinessListing::create($data);
+    //     $listingId = $listing->id;
+
+    //     if ($request->has('gallery_images')) {
+    //         $this->finalizeListing($request, $listingId);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Business listing created successfully.',
+    //         'listing' => $listing
+    //     ]);
+    // }
 
 
     public function finalizeListing(Request $request, $listingId)
@@ -156,90 +221,179 @@ class BusinessListingController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'listing_title' => 'required|string|max:255',
-            'listing_description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'tagline' => 'nullable|string',
-            // 'price_range' => 'nullable|numeric',
-            // 'price_from' => 'nullable|numeric',
-            // 'price_to' => 'nullable|numeric',
-            'features_information' => 'nullable|string',
-            'location' => 'required|string',
-            'address' => 'required|string',
-            'map_lat' => 'nullable|numeric',
-            'map_long' => 'nullable|numeric',
-            'email' => 'nullable|email',
-            'website' => 'required',
-            'phone' => 'nullable|string',
-            'facebook' => 'nullable',
-            // 'twitter' => 'nullable',
-            // 'google_plus' => 'nullable',
-            'instagram' => 'nullable|url',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
-            'status' => 'required',
-            'gallery_images.0' => 'required',
 
-            'business_open_hours' => 'required|array',
-            // 'business_open_hours.Monday' => 'required|array',
-            // 'business_open_hours.Tuesday' => 'required|array',
-            // // Add validation rules for other days as needed
-            // 'business_open_hours.*.isOpen' => 'required|boolean',
-            // 'business_open_hours.*.open_at' => 'required|string',
-            // 'business_open_hours.*.close_at' => 'required|string',
+     public function update(Request $request, $id)
+{
+    // Update validation to accept multiple category IDs
+    $request->validate([
+        'listing_title' => 'required|string|max:255',
+        'listing_description' => 'required|string',
+        'category_id' => 'required|array',  // Accept multiple category IDs as an array
+        'category_id.*' => 'exists:categories,id', // Ensure all category IDs are valid
+        'tagline' => 'nullable|string',
+        'features_information' => 'nullable|string',
+        'location' => 'required|string',
+        'address' => 'required|string',
+        'map_lat' => 'nullable|numeric',
+        'map_long' => 'nullable|numeric',
+        'email' => 'nullable|email',
+        'website' => 'required',
+        'phone' => 'nullable|string',
+        'facebook' => 'nullable',
+        'instagram' => 'nullable|url',
+        'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+        'status' => 'required',
+        'gallery_images.0' => 'required',
+        'business_open_hours' => 'required|array',
+    ]);
 
+    // Find the listing by ID
+    $listing = BusinessListing::find($id);
 
-
-
-
-        ]);
-
-        $listing = BusinessListing::find($id);
-
-        if (!$listing) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Business listing not found.',
-            ], 404);
-        }
-
-        $data = $request->except(['featured_image', 'logo']);
-
-        if ($request->hasFile('featured_image')) {
-            // Delete old feature image if it exists
-            if ($listing->featured_image && Storage::exists($listing->featured_image)) {
-                Storage::delete($listing->featured_image);
-            }
-            $file = $request->file('featured_image');
-            $data['featured_image'] = $file->store('listing_images', 'public');
-        }
-
-        if ($request->hasFile('logo')) {
-            // Delete old logo if it exists
-            if ($listing->logo && Storage::exists($listing->logo)) {
-                Storage::delete($listing->logo);
-            }
-            $file = $request->file('logo');
-            $data['logo'] = $file->store('listing_logos', 'public');
-        }
-        $data['business_open_hours'] =  $request->business_open_hours;
-
-        $listing->update($data);
-
-        $listingId = $id;
-
-        if ($request->has('gallery_images')) {
-            $this->finalizeListing($request, $listingId);
-        }
-
+    if (!$listing) {
         return response()->json([
-            'message' => 'Business listing updated successfully.',
-            'listing' => $listing
-        ]);
+            'status' => false,
+            'message' => 'Business listing not found.',
+        ], 404);
     }
+
+    // Prepare data for update, excluding files
+    $data = $request->except(['featured_image', 'logo', 'category_id']);  // Exclude category_id
+
+    // Handle featured image upload (if exists)
+    if ($request->hasFile('featured_image')) {
+        // Delete old featured image if it exists
+        if ($listing->featured_image && Storage::exists($listing->featured_image)) {
+            Storage::delete($listing->featured_image);
+        }
+        $file = $request->file('featured_image');
+        $data['featured_image'] = $file->store('listing_images', 'public');
+    }
+
+    // Handle logo upload (if exists)
+    if ($request->hasFile('logo')) {
+        // Delete old logo if it exists
+        if ($listing->logo && Storage::exists($listing->logo)) {
+            Storage::delete($listing->logo);
+        }
+        $file = $request->file('logo');
+        $data['logo'] = $file->store('listing_logos', 'public');
+    }
+
+    // Update business open hours if provided
+    $data['business_open_hours'] = $request->business_open_hours;
+
+    // Update the business listing with the new data
+    $listing->update($data);
+
+    // Update categories for this listing
+    if ($request->has('category_id')) {
+        // First, detach all current categories
+        $listing->categories()->detach();
+
+        // Attach the new categories
+        $listing->categories()->attach($request->category_id);
+    }
+
+    // Handle gallery images if provided
+    if ($request->has('gallery_images')) {
+        $this->finalizeListing($request, $id);
+    }
+
+    // Return a successful response
+    return response()->json([
+        'message' => 'Business listing updated successfully.',
+        'listing' => $listing
+    ]);
+}
+
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'listing_title' => 'required|string|max:255',
+    //         'listing_description' => 'required|string',
+    //         'category_id' => 'required|exists:categories,id',
+    //         'tagline' => 'nullable|string',
+    //         // 'price_range' => 'nullable|numeric',
+    //         // 'price_from' => 'nullable|numeric',
+    //         // 'price_to' => 'nullable|numeric',
+    //         'features_information' => 'nullable|string',
+    //         'location' => 'required|string',
+    //         'address' => 'required|string',
+    //         'map_lat' => 'nullable|numeric',
+    //         'map_long' => 'nullable|numeric',
+    //         'email' => 'nullable|email',
+    //         'website' => 'required',
+    //         'phone' => 'nullable|string',
+    //         'facebook' => 'nullable',
+    //         // 'twitter' => 'nullable',
+    //         // 'google_plus' => 'nullable',
+    //         'instagram' => 'nullable|url',
+    //         'featured_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+    //         'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+    //         'status' => 'required',
+    //         'gallery_images.0' => 'required',
+
+    //         'business_open_hours' => 'required|array',
+    //         // 'business_open_hours.Monday' => 'required|array',
+    //         // 'business_open_hours.Tuesday' => 'required|array',
+    //         // // Add validation rules for other days as needed
+    //         // 'business_open_hours.*.isOpen' => 'required|boolean',
+    //         // 'business_open_hours.*.open_at' => 'required|string',
+    //         // 'business_open_hours.*.close_at' => 'required|string',
+
+
+
+
+
+    //     ]);
+
+    //     $listing = BusinessListing::find($id);
+
+    //     if (!$listing) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Business listing not found.',
+    //         ], 404);
+    //     }
+
+    //     $data = $request->except(['featured_image', 'logo']);
+
+    //     if ($request->hasFile('featured_image')) {
+    //         // Delete old feature image if it exists
+    //         if ($listing->featured_image && Storage::exists($listing->featured_image)) {
+    //             Storage::delete($listing->featured_image);
+    //         }
+    //         $file = $request->file('featured_image');
+    //         $data['featured_image'] = $file->store('listing_images', 'public');
+    //     }
+
+    //     if ($request->hasFile('logo')) {
+    //         // Delete old logo if it exists
+    //         if ($listing->logo && Storage::exists($listing->logo)) {
+    //             Storage::delete($listing->logo);
+    //         }
+    //         $file = $request->file('logo');
+    //         $data['logo'] = $file->store('listing_logos', 'public');
+    //     }
+    //     $data['business_open_hours'] =  $request->business_open_hours;
+
+    //     $listing->update($data);
+
+    //     $listingId = $id;
+
+    //     if ($request->has('gallery_images')) {
+    //         $this->finalizeListing($request, $listingId);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Business listing updated successfully.',
+    //         'listing' => $listing
+    //     ]);
+    // }
 
     /**
      * Remove the specified business listing from storage.
