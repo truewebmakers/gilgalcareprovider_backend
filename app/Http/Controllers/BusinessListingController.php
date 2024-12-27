@@ -19,9 +19,9 @@ class BusinessListingController extends Controller
     public function index($id = '')
     {
         if ($id) {
-            $listings = BusinessListing::with('categories')->where('added_by', $id)->get();
+            $listings = BusinessListing::with('category')->where('added_by', $id)->get();
         } else {
-            $listings = BusinessListing::with('categories')->where('status', 'published')->get();
+            $listings = BusinessListing::with('category')->where('status', 'published')->get();
         }
 
         return response()->json($listings);
