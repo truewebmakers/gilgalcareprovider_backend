@@ -544,7 +544,9 @@ class BusinessListingController extends Controller
 
     public function incrementPageViews($id, Request $request)
     {
-        $listing = BusinessListing::find($id);
+        $listing = BusinessListing::with(
+            'categories'
+        )->find($id);
 
         if (!$listing) {
             return response()->json(['message' => 'Listing not found'], 404);
