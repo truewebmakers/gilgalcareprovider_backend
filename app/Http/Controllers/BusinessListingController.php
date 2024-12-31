@@ -443,7 +443,8 @@ class BusinessListingController extends Controller
 
     public function SearchBusinessListing(Request $request)
     {
-        $query = BusinessListing::query();
+        // $query = BusinessListing::query();
+        $query = BusinessListing::with('categories');
 
         // Filter by listing_title
         if ($request->filled('listing_title')) {
