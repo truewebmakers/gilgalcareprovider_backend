@@ -30,7 +30,7 @@
                     <tr>
 
                         <td style="text-align: center;">
-                            <h1 style="margin: 0px;padding-bottom: 25px; text-transform: uppercase;">Email Verification- Speak My Dialect
+                            <h1 style="margin: 0px;padding-bottom: 25px; text-transform: uppercase;">Email Verification- Gilgal Care Provider
                             </h1>
                             {{-- <h2 style="margin: 0px;padding-bottom: 25px;font-size:22px;"> Please renew your subscription</h2> --}}
                             <p style=" margin: 0px 40px;padding-bottom: 25px;line-height: 2; font-size: 15px;">
