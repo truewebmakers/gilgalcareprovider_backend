@@ -245,7 +245,7 @@ class BusinessListingController extends Controller
         'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
         'status' => 'required',
         'gallery_images.0' => 'required',
-        'business_open_hours' => 'required|array',
+        // 'business_open_hours' => 'required|array',
     ]);
 
     // Find the listing by ID
