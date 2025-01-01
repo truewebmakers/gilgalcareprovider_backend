@@ -232,7 +232,7 @@ class BusinessListingController extends Controller
         'category_id.*' => 'exists:categories,id', // Ensure all category IDs are valid
         'tagline' => 'nullable|string',
         'features_information' => 'nullable|string',
-        'location' => 'required|string',
+        'location' => 'nullable|string',
         'address' => 'required|string',
         'map_lat' => 'nullable|numeric',
         'map_long' => 'nullable|numeric',
