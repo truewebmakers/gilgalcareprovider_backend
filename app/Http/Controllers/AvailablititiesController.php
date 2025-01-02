@@ -35,10 +35,10 @@ class AvailablititiesController extends Controller
                     [
                         'listing_id' => $request->listing_id,
                         'day' => $day,
-                        'start_time' => $timeSlot['start_time']
+                        'start_time' => ($timeSlot['start_time']) ?  $timeSlot['start_time'] : null
                     ],
                     [
-                        'end_time' => $timeSlot['end_time'],
+                        'end_time' => ($timeSlot['end_time']) ? $timeSlot['end_time'] : null,
                         'is_enabled' => $isEnabled, // Add `is_enabled` value
                         'updated_at' => now(),
                     ]
