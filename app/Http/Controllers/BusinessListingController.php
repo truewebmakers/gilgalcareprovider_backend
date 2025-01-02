@@ -491,7 +491,8 @@ class BusinessListingController extends Controller
 
         // Filter by location
         if ($request->filled('location')) {
-            $query->where('location', 'like', '%' . $request->input('location') . '%');
+            $query->where('address', 'like', '%' . $request->input('location') . '%');
+           // $query->where('location', 'like', '%' . $request->input('location') . '%');
         }
 
         // Filter by address
