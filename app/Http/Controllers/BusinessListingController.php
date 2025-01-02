@@ -42,7 +42,7 @@ class BusinessListingController extends Controller
             'listing_description' => 'required|string',
             'category_id' => 'required|array',  // Change to array
             'category_id.*' => 'exists:categories,id', // Ensure all provided IDs are valid categories
-            'tagline' => 'nullable|string',
+            'tagline' => 'nullable|string|max:100',
             'features_information' => 'nullable|string',
             'location' => 'nullable',
             'address' => 'required|string',
