@@ -193,11 +193,11 @@ class UserController extends Controller
         try {
             $request->validate([
                 'first_name' => 'required',
-                'last_name' => 'required',
-                'subject' => 'required',
+                'last_name' => 'nullable|string',
+                'subject' => 'nullable|string',
                 'email' => 'required',
-                'phone' => 'required',
-                'query' => 'required'
+                'phone' => 'nullable|string',
+                'query' => 'nullable|string',
 
             ]);
             $post = $request->only(['first_name', 'last_name', 'subject', 'email', 'phone' ,'query']);
