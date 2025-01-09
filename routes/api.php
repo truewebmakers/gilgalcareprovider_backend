@@ -110,3 +110,5 @@ Route::middleware('auth:sanctum')->prefix('provider')->group(function () {
     // Route::get('/availability/{id}', [AvailablititiesController::class, 'index']);
     Route::post('/availability/get-slots', [AvailablititiesController::class, 'getSlots']);
 });
+
+

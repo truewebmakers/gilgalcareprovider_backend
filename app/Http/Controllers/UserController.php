@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User,ContactFormEntry};
+use App\Models\{User,ContactFormEntry,BusinessListing};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -200,10 +200,21 @@ class UserController extends Controller
                 'query' => 'nullable|string',
 
             ]);
+            $listingId = $request->input('listingid',null);
+            $ListingOwnerEmail = '';
+            if($listingId){
+                $listing = BusinessListing::find($listingId);
+                $ListingOwnerEmail = $listing->email;
+            }
             $post = $request->only(['first_name', 'last_name', 'subject', 'email', 'phone' ,'query']);
 
             $email = $request->input('email');
-            $adminEmail = env('MAIL_ADMIN_EMAIL');
+            if( $ListingOwnerEmail){
+                $adminEmail = $ListingOwnerEmail;
+            }else{
+                $adminEmail = env('MAIL_ADMIN_EMAIL');
+            }
+
             Mail::to($adminEmail) ->cc($email)->send(new SendContactUs(data: $post));
 
             ContactFormEntry::create( $post );
