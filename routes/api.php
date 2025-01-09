@@ -104,8 +104,9 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/review-count', [DashboardController::class, 'getReviewCount']);
     Route::get('/listing-count', [DashboardController::class, 'getListCounts']);
 });
+Route::get('/provider/availability/{id}', [AvailablititiesController::class, 'index']);
 Route::middleware('auth:sanctum')->prefix('provider')->group(function () {
     Route::post('/availability', [AvailablititiesController::class, 'store']);
-    Route::get('/availability/{id}', [AvailablititiesController::class, 'index']);
+    // Route::get('/availability/{id}', [AvailablititiesController::class, 'index']);
     Route::post('/availability/get-slots', [AvailablititiesController::class, 'getSlots']);
 });
