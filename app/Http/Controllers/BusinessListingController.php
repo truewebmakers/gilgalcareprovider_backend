@@ -43,7 +43,7 @@ class BusinessListingController extends Controller
             'category_id' => 'required|array',  // Change to array
             'category_id.*' => 'exists:categories,id', // Ensure all provided IDs are valid categories
             'tagline' => 'nullable|string|max:150',
-            'features_information' => 'nullable|string',
+            'features_information' => 'nullable',
             'location' => 'nullable',
             'address' => 'required|string',
             'map_lat' => 'nullable|numeric',
@@ -63,6 +63,11 @@ class BusinessListingController extends Controller
 
         // Prepare the data (exclude files first)
         $data = $request->except(['featured_image', 'logo', 'category_id']);
+
+        if($request->has('features_information')){
+            $data['features_information'] = json_encode($request->input('features_information')) ;
+
+        }
 
         // Handle featured image upload
         if ($request->hasFile('featured_image')) {
@@ -232,7 +237,7 @@ class BusinessListingController extends Controller
         'category_id' => 'required|array',  // Accept multiple category IDs as an array
         'category_id.*' => 'exists:categories,id', // Ensure all category IDs are valid
         'tagline' => 'nullable|string',
-        'features_information' => 'nullable|string',
+        'features_information' => 'nullable',
         'location' => 'nullable|string',
         'address' => 'required|string',
         'map_lat' => 'nullable|numeric',
@@ -261,7 +266,10 @@ class BusinessListingController extends Controller
 
     // Prepare data for update, excluding files
     $data = $request->except(['featured_image', 'logo', 'category_id']);  // Exclude category_id
+    if($request->has('features_information')){
+        $data['features_information'] = json_encode($request->input('features_information')) ;
 
+    }
     // Handle featured image upload (if exists)
     if ($request->hasFile('featured_image')) {
         // Delete old featured image if it exists
